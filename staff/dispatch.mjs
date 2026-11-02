@@ -1,4 +1,4 @@
-import {workTime} from './work-records.mjs?v=20261102-work4';
+import {workTime} from './work-records.mjs?v=20261102-drag';
 export function dispatchRemaining(order,dispatches){const sum={};for(const d of dispatches.filter(d=>d.order_id===order.id))for(const i of d.kream_dispatch_items||[])sum[i.product_id]=(sum[i.product_id]||0)+Number(i.quantity);return (order.kream_order_items||[]).map(i=>({...i,dispatched:Math.round((sum[i.product_id]||0)*1000)/1000,remaining:Math.max(0,Math.round((Number(i.quantity)-(sum[i.product_id]||0))*1000)/1000)}));}
 let values={},notes={},attempt=null,revision=0;
 export function hasDispatchEdits(){return !!attempt||Object.values(values).some(v=>Object.values(v).some(q=>q!==''))||Object.values(notes).some(Boolean);}

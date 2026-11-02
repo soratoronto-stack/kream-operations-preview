@@ -1,22 +1,23 @@
-import {renderReceiptReviews,hasReviewEdits,clearReviewState} from './receiving-review.mjs?v=20261102-work4';
-import {hasSettlementEdits,clearSettlementState} from './settlement.mjs?v=20261102-work4';
-import {hasMaterialEdits,clearMaterialState} from './materials.mjs?v=20261102-work4';
-import {workTime} from './work-records.mjs?v=20261102-work4';
-import {hasCatalogEdits,clearCatalogState} from './catalog-editor.mjs?v=20261102-work4';
-import {hasDailyEdits,clearDailyState} from './daily-log.mjs?v=20261102-work4';
-import {hasLayoutEdits,clearLayoutState} from './order-layout.mjs?v=20261102-work4';
-import {hasChecklistEdits,clearChecklistState} from './checklist.mjs?v=20261102-work4';
-import {hasProductionEdits,clearProductionState} from './production-log.mjs?v=20261102-work4';
-import {hasStockEdits,clearStockEdits} from './store-stock.mjs?v=20261102-work4';
-import {hasDispatchEdits,clearDispatchState} from './dispatch.mjs?v=20261102-work4';
-import {hasWasteEdits,clearWasteState} from './waste.mjs?v=20261102-work4';
+import {hasSubcategoryEdits,clearSubcategoryState} from './subcategory-drag.mjs?v=20261102-drag';
+import {renderReceiptReviews,hasReviewEdits,clearReviewState} from './receiving-review.mjs?v=20261102-drag';
+import {hasSettlementEdits,clearSettlementState} from './settlement.mjs?v=20261102-drag';
+import {hasMaterialEdits,clearMaterialState} from './materials.mjs?v=20261102-drag';
+import {workTime} from './work-records.mjs?v=20261102-drag';
+import {hasCatalogEdits,clearCatalogState} from './catalog-editor.mjs?v=20261102-drag';
+import {hasDailyEdits,clearDailyState} from './daily-log.mjs?v=20261102-drag';
+import {hasLayoutEdits,clearLayoutState} from './order-layout.mjs?v=20261102-drag';
+import {hasChecklistEdits,clearChecklistState} from './checklist.mjs?v=20261102-drag';
+import {hasProductionEdits,clearProductionState} from './production-log.mjs?v=20261102-drag';
+import {hasStockEdits,clearStockEdits} from './store-stock.mjs?v=20261102-drag';
+import {hasDispatchEdits,clearDispatchState} from './dispatch.mjs?v=20261102-drag';
+import {hasWasteEdits,clearWasteState} from './waste.mjs?v=20261102-drag';
 export function outstanding(order,receipts,dispatches=[]){const sums=new Map();for(const r of receipts.filter(r=>r.order_id===order.id))for(const p of r.kream_receipt_items||[])sums.set(p.product_id,Math.round(((sums.get(p.product_id)||0)+Number(p.quantity))*1000)/1000);const ds=dispatches.filter(d=>d.order_id===order.id),sent=new Map();for(const d of ds)for(const i of d.kream_dispatch_items||[])sent.set(i.product_id,(sent.get(i.product_id)||0)+Number(i.quantity));return (order.kream_order_items||[]).map(p=>({...p,received:sums.get(p.product_id)||0,remaining:Math.max(0,Math.round((Number(p.quantity)-(sums.get(p.product_id)||0))*1000)/1000),receivable:Math.max(0,Math.round(((ds.length?(sent.get(p.product_id)||0):Number(p.quantity))-(sums.get(p.product_id)||0))*1000)/1000)}));}
 export function receiptPayload(order,receipts,values,dispatches=[]){const rows=outstanding(order,receipts,dispatches);const items=Object.entries(values).filter(([,q])=>q!==''&&Number(q)!==0).map(([id,q])=>{const row=rows.find(p=>p.product_id===id),n=Number(q);if(!row||!Number.isFinite(n)||n<=0||n>row.receivable||Math.abs(n*1000-Math.round(n*1000))>1e-7)throw new Error('RECEIPT_INVALID');return {product_id:id,quantity:n};});if(!items.length)throw new Error('RECEIPT_EMPTY');return items;}
 export function canEditGuide(profile,guide){return profile?.role==='owner'||profile?.role==='manager'&&guide?.store_id!=null;}
 let receiptOrder='',receiptValues={},receiptNote='',receiptAttempt=null;
 let editing=null,guideDirty=false,guideSearch='';
-export function hasModuleEdits(){return hasReviewEdits()||hasSettlementEdits()||hasMaterialEdits()||hasCatalogEdits()||hasDailyEdits()||hasLayoutEdits()||hasChecklistEdits()||hasProductionEdits()||hasStockEdits()||hasDispatchEdits()||hasWasteEdits()||guideDirty||!!receiptAttempt||Object.values(receiptValues).some(q=>Number(q)>0)||!!receiptNote;}
-export function clearModuleState(){clearReviewState();clearSettlementState();clearMaterialState();clearCatalogState();clearDailyState();clearLayoutState();clearChecklistState();clearProductionState();clearStockEdits();clearDispatchState();clearWasteState();receiptOrder='';receiptValues={};receiptNote='';receiptAttempt=null;editing=null;guideDirty=false;guideSearch='';}
+export function hasModuleEdits(){return hasSubcategoryEdits()||hasReviewEdits()||hasSettlementEdits()||hasMaterialEdits()||hasCatalogEdits()||hasDailyEdits()||hasLayoutEdits()||hasChecklistEdits()||hasProductionEdits()||hasStockEdits()||hasDispatchEdits()||hasWasteEdits()||guideDirty||!!receiptAttempt||Object.values(receiptValues).some(q=>Number(q)>0)||!!receiptNote;}
+export function clearModuleState(){clearSubcategoryState();clearReviewState();clearSettlementState();clearMaterialState();clearCatalogState();clearDailyState();clearLayoutState();clearChecklistState();clearProductionState();clearStockEdits();clearDispatchState();clearWasteState();receiptOrder='';receiptValues={};receiptNote='';receiptAttempt=null;editing=null;guideDirty=false;guideSearch='';}
 export function renderReceiving(host,c){
  const {orders,receipts,profile,stores,store,t,esc,act,db,reload,say}=c;
  const list=orders.filter(o=>o.status!=='cancelled');if(!list.some(o=>o.id===receiptOrder)){receiptOrder=list[0]?.id||'';receiptValues={};receiptNote='';}

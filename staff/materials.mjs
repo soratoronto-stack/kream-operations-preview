@@ -1,4 +1,4 @@
-import {workTime} from './work-records.mjs?v=20261102-work4';
+import {workTime} from './work-records.mjs?v=20261102-drag';
 let editing=null,dirty=false,counts={},requestForm={material:'',quantity:''},purchaseAttempt=null,receiveAttempt=null,epoch=0,category='',search='';
 export const hasMaterialEdits=()=>dirty||Object.keys(counts).length>0||!!purchaseAttempt||!!receiveAttempt||!!requestForm.quantity;
 export function clearMaterialState(){editing=null;dirty=false;counts={};requestForm={material:'',quantity:''};purchaseAttempt=null;receiveAttempt=null;epoch++;}
