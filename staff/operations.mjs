@@ -1,6 +1,6 @@
-import {hasStockEdits,clearStockEdits} from './store-stock.mjs?v=20261102-ops';
-import {hasDispatchEdits,clearDispatchState} from './dispatch.mjs?v=20261102-ops';
-import {hasWasteEdits,clearWasteState} from './waste.mjs?v=20261102-ops';
+import {hasStockEdits,clearStockEdits} from './store-stock.mjs?v=20261102-ledgers';
+import {hasDispatchEdits,clearDispatchState} from './dispatch.mjs?v=20261102-ledgers';
+import {hasWasteEdits,clearWasteState} from './waste.mjs?v=20261102-ledgers';
 export function outstanding(order,receipts,dispatches=[]){const sums=new Map();for(const r of receipts.filter(r=>r.order_id===order.id))for(const p of r.kream_receipt_items||[])sums.set(p.product_id,Math.round(((sums.get(p.product_id)||0)+Number(p.quantity))*1000)/1000);const ds=dispatches.filter(d=>d.order_id===order.id),sent=new Map();for(const d of ds)for(const i of d.kream_dispatch_items||[])sent.set(i.product_id,(sent.get(i.product_id)||0)+Number(i.quantity));return (order.kream_order_items||[]).map(p=>({...p,received:sums.get(p.product_id)||0,remaining:Math.max(0,Math.round((Number(p.quantity)-(sums.get(p.product_id)||0))*1000)/1000),receivable:Math.max(0,Math.round(((ds.length?(sent.get(p.product_id)||0):Number(p.quantity))-(sums.get(p.product_id)||0))*1000)/1000)}));}
 export function receiptPayload(order,receipts,values,dispatches=[]){const rows=outstanding(order,receipts,dispatches);const items=Object.entries(values).filter(([,q])=>q!==''&&Number(q)!==0).map(([id,q])=>{const row=rows.find(p=>p.product_id===id),n=Number(q);if(!row||!Number.isFinite(n)||n<=0||n>row.receivable||Math.abs(n*1000-Math.round(n*1000))>1e-7)throw new Error('RECEIPT_INVALID');return {product_id:id,quantity:n};});if(!items.length)throw new Error('RECEIPT_EMPTY');return items;}
 export function canEditGuide(profile,guide){return profile?.role==='owner'||profile?.role==='manager'&&guide?.store_id!=null;}

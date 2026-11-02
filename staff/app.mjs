@@ -1,10 +1,10 @@
-import {renderOverview} from './overview.mjs?v=20261102-ops';
-import {stockFields,bindStock} from './store-stock.mjs?v=20261102-ops';
-import {renderDispatch} from './dispatch.mjs?v=20261102-ops';
-import {renderProduction} from './production.mjs?v=20261102-ops';
-import {renderWaste} from './waste.mjs?v=20261102-ops';
-import {previewRoles,visiblePages,canPreview,isFactoryRole,scopePreview} from './access.mjs?v=20261102-ops';
-import {renderReceiving,renderGuides,hasModuleEdits,clearModuleState} from './operations.mjs?v=20261102-ops';
+import {renderOverview} from './overview.mjs?v=20261102-ledgers';
+import {stockFields,bindStock} from './store-stock.mjs?v=20261102-ledgers';
+import {renderDispatch} from './dispatch.mjs?v=20261102-ledgers';
+import {renderProduction} from './production.mjs?v=20261102-ledgers';
+import {renderWaste} from './waste.mjs?v=20261102-ledgers';
+import {previewRoles,visiblePages,canPreview,isFactoryRole,scopePreview} from './access.mjs?v=20261102-ledgers';
+import {renderReceiving,renderGuides,hasModuleEdits,clearModuleState} from './operations.mjs?v=20261102-ledgers';
 import {artwork,deliveryLabel,filterProducts,frequentIds} from './presentation.mjs';
 import {tomorrowToronto,validItems,saveDraft,submitDraft,aggregate} from './core.mjs';
 const $=s=>document.querySelector(s), esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
