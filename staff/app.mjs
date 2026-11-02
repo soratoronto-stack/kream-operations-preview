@@ -1,4 +1,4 @@
-import {subcategoryMarkup,bindSubcategoryDrag} from './subcategory-drag.mjs?v=20261102-drag';
+import {subcategoryMarkup,bindSubcategoryDrag} from './subcategory-drag.mjs?v=20261102-drag2';
 import {renderSettlement,readPrices,productPriceMarkup} from './settlement.mjs?v=20261102-drag';
 import {renderMaterials} from './materials.mjs?v=20261102-drag';
 import {renderCatalogTools,openProduct,signedPhotos,canManageProducts} from './catalog-editor.mjs?v=20261102-drag';
@@ -13,7 +13,7 @@ import {renderDispatch} from './dispatch.mjs?v=20261102-drag';
 import {renderProduction} from './production.mjs?v=20261102-drag';
 import {renderWaste,todayToronto} from './waste.mjs?v=20261102-drag';
 import {orderedPages,previewRoles,visiblePages,canPreview,isFactoryRole,scopePreview} from './access.mjs?v=20261102-drag';
-import {renderReceiving,renderGuides,hasModuleEdits,clearModuleState} from './operations.mjs?v=20261102-drag';
+import {renderReceiving,renderGuides,hasModuleEdits,clearModuleState} from './operations.mjs?v=20261102-drag2';
 import {artwork,deliveryLabel,filterProducts,frequentIds} from './presentation.mjs';
 import {tomorrowToronto,validItems,saveDraft,submitDraft,aggregate} from './core.mjs';
 const $=s=>document.querySelector(s), esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
