@@ -1,5 +1,5 @@
-import {todayToronto} from './waste.mjs?v=20261102-work3';
-import {workTime} from './work-records.mjs?v=20261102-work3';
+import {todayToronto} from './waste.mjs?v=20261102-work4';
+import {workTime} from './work-records.mjs?v=20261102-work4';
 let selectedStore='',day=todayToronto(),form=null,dirty=false,attempt=null,epoch=0;
 export const hasDailyEdits=()=>dirty||!!attempt;
 export function clearDailyState(){form=null;dirty=false;attempt=null;epoch++;}

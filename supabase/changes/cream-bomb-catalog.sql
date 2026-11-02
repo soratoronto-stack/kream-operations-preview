@@ -1,0 +1,18 @@
+begin;
+insert into public.kream_catalog(id,name_ko,name_en,category,subgroup,order_unit,unit_confirmed,production_team) values('bomb-milk','밀크 크림밤','Milk Cream Bomb','디저트','크림밤','EA',true,'breads') on conflict(id) do nothing;
+insert into public.kream_catalog(id,name_ko,name_en,category,subgroup,order_unit,unit_confirmed,production_team) values('bomb-custard','커스터드 크림밤','Custard Cream Bomb','디저트','크림밤','EA',true,'breads') on conflict(id) do nothing;
+insert into public.kream_catalog(id,name_ko,name_en,category,subgroup,order_unit,unit_confirmed,production_team) values('bomb-tiramisu','티라미수 크림밤','Tiramisu Cream Bomb','디저트','크림밤','EA',true,'breads') on conflict(id) do nothing;
+insert into public.kream_catalog(id,name_ko,name_en,category,subgroup,order_unit,unit_confirmed,production_team) values('bomb-potato','감자 크림밤','Potato Cream Bomb','디저트','크림밤','EA',true,'breads') on conflict(id) do nothing;
+insert into public.kream_catalog(id,name_ko,name_en,category,subgroup,order_unit,unit_confirmed,production_team) values('bomb-strawberry','딸기 크림밤','Strawberry Cream Bomb','디저트','크림밤','EA',true,'breads') on conflict(id) do nothing;
+insert into public.kream_catalog(id,name_ko,name_en,category,subgroup,order_unit,unit_confirmed,production_team) values('bomb-blueberry','블루베리 크림밤','Blueberry Cream Bomb','디저트','크림밤','EA',true,'breads') on conflict(id) do nothing;
+insert into public.kream_catalog(id,name_ko,name_en,category,subgroup,order_unit,unit_confirmed,production_team) values('bomb-yuzu','유자 크림밤','Yuzu Cream Bomb','디저트','크림밤','EA',true,'breads') on conflict(id) do nothing;
+insert into public.kream_catalog(id,name_ko,name_en,category,subgroup,order_unit,unit_confirmed,production_team) values('bomb-matcha','말차 크림밤','Matcha Cream Bomb','디저트','크림밤','EA',true,'breads') on conflict(id) do nothing;
+insert into public.kream_catalog(id,name_ko,name_en,category,subgroup,order_unit,unit_confirmed,production_team) values('bomb-earl-grey','얼그레이 크림밤','Earl grey Cream Bomb','디저트','크림밤','EA',true,'breads') on conflict(id) do nothing;
+insert into public.kream_catalog(id,name_ko,name_en,category,subgroup,order_unit,unit_confirmed,production_team) values('bomb-taro','타로 크림밤','Taro Cream Bomb','디저트','크림밤','EA',true,'breads') on conflict(id) do nothing;
+insert into public.kream_catalog(id,name_ko,name_en,category,subgroup,order_unit,unit_confirmed,production_team) values('bomb-pistachio','피스타치오 크림밤','Pistachio Cream Bomb','디저트','크림밤','EA',true,'breads') on conflict(id) do nothing;
+insert into public.kream_catalog(id,name_ko,name_en,category,subgroup,order_unit,unit_confirmed,production_team) values('bomb-choco-dip','초코 딥 크림밤','Choco Dip Cream Bomb','디저트','크림밤','EA',true,'breads') on conflict(id) do nothing;
+insert into public.kream_catalog(id,name_ko,name_en,category,subgroup,order_unit,unit_confirmed,production_team) values('bomb-chocolate','초콜릿 크림밤','Chocolate Cream Bomb','디저트','크림밤','EA',true,'breads') on conflict(id) do nothing;
+insert into public.kream_catalog(id,name_ko,name_en,category,subgroup,order_unit,unit_confirmed,production_team) values('bomb-lotus','로투스 크림밤','Lotus Cream Bomb','디저트','크림밤','EA',true,'breads') on conflict(id) do nothing;
+insert into public.kream_catalog(id,name_ko,name_en,category,subgroup,order_unit,unit_confirmed,production_team) values('bomb-black-sesame','흑임자 크림밤','Black Sesame Cream Bomb','디저트','크림밤','EA',true,'breads') on conflict(id) do nothing;
+insert into public.kream_catalog(id,name_ko,name_en,category,subgroup,order_unit,unit_confirmed,production_team) values('bomb-pumpkin-cinnamon','단호박 시나몬 크림밤','Pumpkin Cinnamon Cream Bomb','디저트','크림밤','EA',true,'breads') on conflict(id) do nothing;
+commit;

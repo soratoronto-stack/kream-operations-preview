@@ -1,0 +1,31 @@
+begin;
+insert into auth.users(id,email) values('c0000000-0000-4000-8000-000000000001','review-owner@example.invalid'),('c0000000-0000-4000-8000-000000000002','review-staff@example.invalid');
+insert into public.kream_profiles(user_id,display_name,role,active) values('c0000000-0000-4000-8000-000000000001','Review owner','owner',true),('c0000000-0000-4000-8000-000000000002','Review staff','employee',true);
+insert into public.kream_memberships values('c0000000-0000-4000-8000-000000000002','midland');
+insert into public.kream_catalog(id,name_ko,name_en,order_unit,unit_confirmed) values('review-test','차이 시험','Review test','EA',true);
+insert into public.kream_orders(id,source_draft_id,source_revision,created_by,store_id,delivery_date,note) values('c1000000-0000-4000-8000-000000000001',gen_random_uuid(),1,'c0000000-0000-4000-8000-000000000002','midland',current_date,'test');
+insert into public.kream_order_items(order_id,product_id,name_ko,name_en,order_unit,quantity) values('c1000000-0000-4000-8000-000000000001','review-test','차이 시험','Review test','EA',8);
+insert into public.kream_dispatches(id,order_id,store_id,dispatched_by) values('c2000000-0000-4000-8000-000000000001','c1000000-0000-4000-8000-000000000001','midland','c0000000-0000-4000-8000-000000000001');
+insert into public.kream_dispatch_items values('c2000000-0000-4000-8000-000000000001','review-test',8);
+insert into public.kream_stock(store_id,product_id,on_hand,minimum,counted_by) values('midland','review-test',10,2,'c0000000-0000-4000-8000-000000000002');
+select set_config('request.jwt.claim.sub','c0000000-0000-4000-8000-000000000002',true);set local role authenticated;
+do $$begin
+ perform public.kream_receive_with_review('c1000000-0000-4000-8000-000000000001','c3000000-0000-4000-8000-000000000001','[{"product_id":"review-test","quantity":8}]','[{"product_id":"review-test","quantity":6}]','2 missing');
+ perform public.kream_receive_with_review('c1000000-0000-4000-8000-000000000001','c3000000-0000-4000-8000-000000000001','[{"product_id":"review-test","quantity":8}]','[{"product_id":"review-test","quantity":6}]','2 missing');
+ if (select on_hand from public.kream_stock where store_id='midland' and product_id='review-test')<>16 then raise exception 'FAIL actual stock/idempotency';end if;
+ if not exists(select 1 from public.kream_receiving_reviews where id='c3000000-0000-4000-8000-000000000001' and status='open' and recorded_name='Review staff') then raise exception 'FAIL review flag';end if;
+ if (select quantity from public.kream_dispatch_items where dispatch_id='c2000000-0000-4000-8000-000000000001')<>8 then raise exception 'FAIL receipt changed dispatch billing';end if;
+ begin perform public.kream_resolve_receiving_review('c3000000-0000-4000-8000-000000000001','credit','Staff credit',5,current_date);raise exception 'FAIL staff credit';exception when insufficient_privilege then null;end;
+ begin perform public.kream_receive_with_review('c1000000-0000-4000-8000-000000000001',gen_random_uuid(),'[{"product_id":"review-test","quantity":8}]','[{"product_id":"review-test","quantity":6}]','Stale');raise exception 'FAIL stale reference';exception when serialization_failure then null;end;
+ perform public.kream_receive_with_review('c1000000-0000-4000-8000-000000000001','c3000000-0000-4000-8000-000000000002','[{"product_id":"review-test","quantity":2}]','[{"product_id":"review-test","quantity":0}]','Nothing arrived');
+ if (select on_hand from public.kream_stock where store_id='midland' and product_id='review-test')<>16 then raise exception 'FAIL zero receipt stock';end if;
+end$$;reset role;
+select set_config('request.jwt.claim.sub','c0000000-0000-4000-8000-000000000001',true);set local role authenticated;
+do $$declare period date:=date_trunc('month',current_date)::date;begin
+ perform public.kream_resolve_receiving_review('c3000000-0000-4000-8000-000000000001','credit','Approved shortage',5,period);
+ perform public.kream_resolve_receiving_review('c3000000-0000-4000-8000-000000000001','credit','Approved shortage',5,period);
+ if (select count(*) from public.kream_statement_adjustments where reason like '%c3000000-0000-4000-8000-000000000001%')<>1 then raise exception 'FAIL duplicate credit';end if;
+ if (select sum(amount) from public.kream_statement_adjustments where reason like '%c3000000-0000-4000-8000-000000000001%')<>-5 then raise exception 'FAIL credit amount';end if;
+end$$;reset role;
+rollback;
+select 'PASS: dispatched 8 / received 6 -> known stock +6, needs review, billing unchanged; zero receipt; stale/double retry protection; only owner credits; fixtures rolled back' as verification;

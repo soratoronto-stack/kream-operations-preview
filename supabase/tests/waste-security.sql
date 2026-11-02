@@ -1,0 +1,45 @@
+begin;
+insert into auth.users(id,email) values('40000000-0000-4000-8000-000000000001','waste-store@example.invalid'),('40000000-0000-4000-8000-000000000002','waste-factory@example.invalid'),('40000000-0000-4000-8000-000000000003','waste-owner@example.invalid');
+insert into public.kream_profiles(user_id,display_name,role,active) values('40000000-0000-4000-8000-000000000001','Waste store','employee',true),('40000000-0000-4000-8000-000000000002','Waste factory','factory',true),('40000000-0000-4000-8000-000000000003','Waste owner','owner',true);
+insert into public.kream_stores(id,name) values('waste-test','Waste test'),('waste-other','Other');
+insert into public.kream_memberships(user_id,store_id) values('40000000-0000-4000-8000-000000000001','waste-test');
+set local role anon;
+do $$ begin
+ begin perform count(*) from public.kream_waste;raise exception 'FAIL anon read';exception when insufficient_privilege then null;end;
+ begin perform public.kream_record_waste(null,null,null,null,null,null,null,null,null);raise exception 'FAIL anon RPC';exception when insufficient_privilege then null;end;
+end $$;
+reset role;
+select set_config('request.jwt.claim.sub','40000000-0000-4000-8000-000000000001',true);
+set local role authenticated;
+do $$ declare rid uuid:='41000000-0000-4000-8000-000000000001';begin
+ perform public.kream_record_waste(rid,'store','waste-test',(now() at time zone 'America/Toronto')::date,'Test cookie',2,'ea','unsold','test');
+ perform public.kream_record_waste(rid,'store','waste-test',(now() at time zone 'America/Toronto')::date,'Test cookie',2,'ea','unsold','test');
+ if(select count(*) from public.kream_waste where id=rid)<>1 then raise exception 'FAIL retry duplicated';end if;
+ begin perform public.kream_record_waste(rid,'store','waste-test',(now() at time zone 'America/Toronto')::date,'Test cookie',3,'ea','unsold','test');raise exception 'FAIL changed retry';exception when invalid_parameter_value then null;end;
+ begin perform public.kream_record_waste(gen_random_uuid(),'factory',null,current_date,'x',1,'ea','unsold','');raise exception 'FAIL store writes factory';exception when insufficient_privilege then null;end;
+ begin perform public.kream_record_waste(gen_random_uuid(),'store','waste-other',current_date,'x',1,'ea','unsold','');raise exception 'FAIL other store';exception when insufficient_privilege then null;end;
+ begin perform public.kream_record_waste(gen_random_uuid(),'store','waste-test',current_date+2,'x',1,'ea','unsold','');raise exception 'FAIL future';exception when invalid_parameter_value then null;end;
+ begin perform public.kream_record_waste(gen_random_uuid(),'store','waste-test',(now() at time zone 'America/Toronto')::date,'x',0.5,'ea','unsold','');raise exception 'FAIL fractional count';exception when invalid_parameter_value then null;end;
+ begin perform public.kream_record_waste(gen_random_uuid(),'store','waste-test',(now() at time zone 'America/Toronto')::date,'x',1,'kg','other','');raise exception 'FAIL other no note';exception when invalid_parameter_value then null;end;
+ begin update public.kream_waste set quantity=3 where id=rid;raise exception 'FAIL overwrite';exception when insufficient_privilege then null;end;
+end $$;
+reset role;
+select set_config('request.jwt.claim.sub','40000000-0000-4000-8000-000000000002',true);
+set local role authenticated;
+do $$ begin
+ perform public.kream_record_waste('41000000-0000-4000-8000-000000000002','factory',null,(now() at time zone 'America/Toronto')::date,'Cream cheese',0.5,'kg','spoilage','test');
+ if exists(select 1 from public.kream_waste where location_kind='store') then raise exception 'FAIL factory sees store waste';end if;
+ if not exists(select 1 from public.kream_waste where id='41000000-0000-4000-8000-000000000002' and recorded_name='Waste factory') then raise exception 'FAIL factory read/author';end if;
+ begin perform public.kream_record_waste(gen_random_uuid(),'store','waste-test',current_date,'x',1,'ea','unsold','');raise exception 'FAIL factory writes store';exception when insufficient_privilege then null;end;
+end $$;
+reset role;
+select set_config('request.jwt.claim.sub','40000000-0000-4000-8000-000000000001',true);
+set local role authenticated;
+do $$ begin if exists(select 1 from public.kream_waste where location_kind='factory') then raise exception 'FAIL store sees factory';end if;end $$;
+reset role;
+select set_config('request.jwt.claim.sub','40000000-0000-4000-8000-000000000003',true);
+set local role authenticated;
+do $$ begin if(select count(*) from public.kream_waste where id in ('41000000-0000-4000-8000-000000000001','41000000-0000-4000-8000-000000000002'))<>2 then raise exception 'FAIL owner all locations';end if;end $$;
+reset role;
+rollback;
+select 'PASS: waste creation, factory/store isolation, owner visibility, validation, append-only, retry idempotency; fixtures rolled back' as verification;

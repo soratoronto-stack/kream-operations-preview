@@ -1,5 +1,5 @@
 import {todayToronto} from './waste.mjs?v=20261102-ledgers';
-import {latestChecks,workTime} from './work-records.mjs?v=20261102-work3';
+import {latestChecks,workTime} from './work-records.mjs?v=20261102-work4';
 const phases=[['opening','오픈준비','Opening'],['midday','중간점검','Midday checks'],['closing','마감','Closing']];
 let selectedStore='',day=todayToronto(),editor=null,dirty=false,attempt=null,epoch=0;
 export const hasChecklistEdits=()=>dirty||!!attempt;

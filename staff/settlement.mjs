@@ -1,4 +1,4 @@
-import {todayToronto} from './waste.mjs?v=20261102-work3';
+import {todayToronto} from './waste.mjs?v=20261102-work4';
 export function periodFor(day){return day.slice(0,8)+(Number(day.slice(8))<=15?'01':'16');}
 export function periodEnd(start){return start.slice(8)==='01'?start.slice(0,8)+'15':new Date(Date.UTC(+start.slice(0,4),+start.slice(5,7),0)).toISOString().slice(0,10);}
 export function dueFor(start){const d=new Date(periodEnd(start)+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+7);return d.toISOString().slice(0,10);}
