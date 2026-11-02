@@ -1,0 +1,43 @@
+begin;
+insert into auth.users(id,email) values('b0000000-0000-4000-8000-000000000001','money-owner@example.invalid'),('b0000000-0000-4000-8000-000000000002','money-midland@example.invalid'),('b0000000-0000-4000-8000-000000000003','money-staff@example.invalid'),('b0000000-0000-4000-8000-000000000004','money-inactive@example.invalid');
+insert into public.kream_profiles(user_id,display_name,role,active) values('b0000000-0000-4000-8000-000000000001','Money owner','owner',true),('b0000000-0000-4000-8000-000000000002','Money Midland','midland_owner',true),('b0000000-0000-4000-8000-000000000003','Money staff','employee',true),('b0000000-0000-4000-8000-000000000004','Inactive money','owner',false);
+insert into public.kream_memberships(user_id,store_id) values('b0000000-0000-4000-8000-000000000002','midland'),('b0000000-0000-4000-8000-000000000003','midland');
+insert into public.kream_catalog(id,name_ko,name_en,order_unit,unit_confirmed) values('money-test','정산 시험','Money test','EA',true);
+insert into public.kream_orders(id,source_draft_id,source_revision,created_by,store_id,delivery_date,note) values('b1000000-0000-4000-8000-000000000001',gen_random_uuid(),1,'b0000000-0000-4000-8000-000000000003','midland','2020-02-28','test');
+insert into public.kream_order_items(order_id,product_id,name_ko,name_en,order_unit,quantity) values('b1000000-0000-4000-8000-000000000001','money-test','정산 시험','Money test','EA',5);
+insert into public.kream_dispatches(id,order_id,store_id,dispatched_by,created_at) values('b2000000-0000-4000-8000-000000000001','b1000000-0000-4000-8000-000000000001','midland','b0000000-0000-4000-8000-000000000001','2020-02-28 12:00:00-05');
+insert into public.kream_dispatch_items values('b2000000-0000-4000-8000-000000000001','money-test',3);
+select set_config('request.jwt.claim.sub','b0000000-0000-4000-8000-000000000001',true);set local role authenticated;
+do $$declare r jsonb;begin
+ r:=public.kream_midland_report('2020-02-16');if r->>'total' is not null or (r->>'missing_prices')::int<>1 then raise exception 'FAIL unknown money';end if;
+ perform public.kream_save_delivery_price('money-test','2020-02-01',2.5,0);
+ perform public.kream_save_delivery_price('money-test','2020-03-01',99,0);
+ perform public.kream_save_monthly_sales('2020-02-01',1000,0);
+ perform public.kream_add_statement_adjustment('b3000000-0000-4000-8000-000000000001','2020-02-16',-1,'Test credit');
+ perform public.kream_add_statement_adjustment('b3000000-0000-4000-8000-000000000001','2020-02-16',-1,'Test credit');
+ r:=public.kream_midland_report('2020-02-16');
+ if (r->>'subtotal')::numeric<>7.5 or (r->>'royalty')::numeric<>40 or (r->>'total')::numeric<>46.5 or r->>'due'<>'2020-03-07' or jsonb_array_length(r->'orders')<>1 then raise exception 'FAIL totals/effective price/leap due/order history %',r;end if;
+ perform public.kream_confirm_statement('2020-02-16');perform public.kream_confirm_statement('2020-02-16');
+ perform public.kream_save_delivery_price('money-test','2020-02-01',10,1);
+ r:=public.kream_midland_report('2020-02-16');if (r->>'total')::numeric<>46.5 then raise exception 'FAIL frozen statement';end if;
+ perform public.kream_record_statement_payment('b4000000-0000-4000-8000-000000000001','2020-02-16',20,'2020-03-01','Test receipt');
+ perform public.kream_record_statement_payment('b4000000-0000-4000-8000-000000000001','2020-02-16',20,'2020-03-01','Test receipt');
+ r:=public.kream_midland_report('2020-02-16');if (r->>'balance')::numeric<>26.5 then raise exception 'FAIL payment idempotency';end if;
+ begin perform public.kream_record_statement_payment(gen_random_uuid(),'2020-02-16',30,'2020-03-01','Over');raise exception 'FAIL overpayment';exception when invalid_parameter_value then null;end;
+ begin perform public.kream_save_monthly_sales('2020-02-01',2000,1);raise exception 'FAIL changed confirmed sales';exception when invalid_parameter_value then null;end;
+end$$;reset role;
+select set_config('request.jwt.claim.sub','b0000000-0000-4000-8000-000000000002',true);set local role authenticated;
+do $$begin
+ if (public.kream_midland_report('2020-02-16')->>'total')::numeric<>46.5 then raise exception 'FAIL owner read';end if;
+ begin perform public.kream_save_delivery_price('money-test','2020-02-01',1,2);raise exception 'FAIL Midland edits price';exception when insufficient_privilege then null;end;
+end$$;reset role;
+select set_config('request.jwt.claim.sub','b0000000-0000-4000-8000-000000000003',true);set local role authenticated;
+do $$begin
+ if exists(select 1 from public.kream_delivery_prices) or exists(select 1 from public.kream_statements) then raise exception 'FAIL employee money rows';end if;
+ begin perform public.kream_midland_report('2020-02-16');raise exception 'FAIL employee RPC';exception when insufficient_privilege then null;end;
+end$$;reset role;
+select set_config('request.jwt.claim.sub','b0000000-0000-4000-8000-000000000004',true);set local role authenticated;
+do $$begin begin perform public.kream_midland_report('2020-02-16');raise exception 'FAIL inactive RPC';exception when insufficient_privilege then null;end;end$$;reset role;
+set local role anon;do $$begin begin perform public.kream_midland_report('2020-02-16');raise exception 'FAIL anon RPC';exception when insufficient_privilege then null;end;end$$;reset role;
+rollback;
+select 'PASS: actual dispatch pricing, effective dates, royalty 4%, 7-day deadline, immutable statement, credit/payment retries, employee/inactive/anon denied; fixtures rolled back' as verification;

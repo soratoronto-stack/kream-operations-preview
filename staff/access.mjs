@@ -16,7 +16,7 @@ export function isFactoryRole(role){return ['factory','factory_staff','factory_m
 export function scopePreview(role,storeId,{orders=[],receipts=[],guides=[]}){const factory=isFactoryRole(role);const scopedOrders=orders.filter(o=>factory||o.store_id===storeId),ids=new Set(scopedOrders.map(o=>o.id));return {orders:scopedOrders,receipts:receipts.filter(r=>(factory||r.store_id===storeId)&&ids.has(r.order_id)),guides:guides.filter(g=>{
  if(g.archived)return false;
  if(role==='manager'&&g.store_id===storeId)return true;
- return g.published&&(g.store_id==null||factory||g.store_id===storeId);
+ return g.published&&(g.store_id==null||factory||g.store_id===storeId)&&(!g.audience||g.audience==='all'||g.audience===(factory?'factory':'store'));
  })};}
 
 export function orderedPages(pages,role){if(isFactoryRole(role)){const rank=['production','dispatch','productionlog','inventory','purchases','materialreceiving','waste','sop'];return [...pages].sort((a,b)=>(rank.indexOf(a[0])<0?999:rank.indexOf(a[0]))-(rank.indexOf(b[0])<0?999:rank.indexOf(b[0])));}if(!['employee','manager','midland_owner'].includes(role))return pages;const order=['manual','receiving','order','history','waste','daily','sop','settlement'];return [...pages].sort((a,b)=>(order.indexOf(a[0])<0?999:order.indexOf(a[0]))-(order.indexOf(b[0])<0?999:order.indexOf(b[0])));}

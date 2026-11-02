@@ -31,7 +31,7 @@ do $$ begin
 end $$;
 reset role;
 select set_config('request.jwt.claim.sub','a0000000-0000-4000-8000-000000000004',true);
-set local role authenticated;
+-- Fixture setup uses postgres; the application inserts generated IDs.
 insert into public.kream_guides(id,kind,title_ko,body_ko,published,audience) values('a4000000-0000-4000-8000-000000000001','sop','Factory SOP test','Factory internal test',true,'factory'),('a4000000-0000-4000-8000-000000000002','sop','Store SOP test','Store internal test',true,'store');
 reset role;
 select set_config('request.jwt.claim.sub','a0000000-0000-4000-8000-000000000003',true);

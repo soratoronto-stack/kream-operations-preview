@@ -1,4 +1,4 @@
-import {recommendation} from './replenishment.mjs?v=20261102-work2';
+import {recommendation} from './replenishment.mjs?v=20261102-work3';
 let edits={};
 export const hasStockEdits=()=>Object.keys(edits).length>0;
 export function clearStockEdits(){edits={};}

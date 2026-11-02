@@ -27,6 +27,6 @@ test('authenticated presentation preserves draft through navigation and marks un
  let source=fs.readFileSync(new URL('../app.mjs',import.meta.url),'utf8').replace(/^import .*;\n/gm,'').replace(/boot\(\);\s*$/,'');
  vm.runInContext(source+`;user={id:'test'};profile={role:'owner',active:true,display_name:'Test'};stores=[{id:'finch',name:'Finch'}];store='finch';catalog=${JSON.stringify(catalog)};quantities={milk:3};dirty=true;render();`,context);
  assert.match(node('#navigation').innerHTML,/매장 발주/);assert.match(node('#products').innerHTML,/stepper/);assert.match(node('#categories').innerHTML,/디저트/);
- vm.runInContext("page='settlement';render();",context);assert.match(node('#view').innerHTML,/실제 자료 연결 준비 중/);assert.equal(node('#cart').innerHTML,'');
+ vm.runInContext("page='future';render();",context);assert.match(node('#view').innerHTML,/실제 자료 연결 준비 중/);assert.equal(node('#cart').innerHTML,'');
  vm.runInContext("page='order';render();",context);assert.match(node('#products').innerHTML,/value="3"/);assert.equal(vm.runInContext('dirty',context),true);
 });
