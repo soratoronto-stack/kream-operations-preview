@@ -5,7 +5,7 @@ import {renderCatalogTools,openProduct,signedPhotos,canManageProducts} from './c
 import {renderDailyLog} from './daily-log.mjs?v=20261102-drag';
 import {recommendation} from './replenishment.mjs?v=20261102-drag';
 import {renderProductionLog} from './production-log.mjs?v=20261102-drag';
-import {renderChecklist} from './checklist.mjs?v=20261102-manual-edit';
+import {renderChecklist} from './checklist.mjs?v=20261102-manual-try';
 import {sortCatalog,ordered,groupKey,renderLayoutEditor} from './order-layout.mjs?v=20261102-drag';
 import {renderOverview} from './overview.mjs?v=20261102-drag';
 import {stockFields,bindStock} from './store-stock.mjs?v=20261102-drag';
