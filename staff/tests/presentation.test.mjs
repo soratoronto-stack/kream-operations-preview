@@ -1,3 +1,5 @@
+import * as catalogModule from '../catalog-editor.mjs';
+import * as dailyModule from '../daily-log.mjs';
 import * as replenishmentModule from '../replenishment.mjs';
 import * as layoutModule from '../order-layout.mjs';
 import * as checklistModule from '../checklist.mjs';
@@ -21,10 +23,10 @@ test('frequent counts distinct delivery days in seven-day window, excludes cance
 test('delivery display has weekday and omits year in both languages',()=>{for(const lang of ['ko','en']){const label=presentation.deliveryLabel('2026-11-02',lang);assert.ok(!label.includes('2026'));assert.match(label,lang==='ko'?/월/:/Mon/);}});
 test('authenticated presentation preserves draft through navigation and marks unconnected modules',()=>{
  const nodes=new Map();const node=id=>{if(!nodes.has(id))nodes.set(id,{innerHTML:'',textContent:'',hidden:false,classList:{toggle(){}},querySelector:s=>node(s),querySelectorAll:()=>[],scrollIntoView(){}});return nodes.get(id);};
- const context=vm.createContext({...replenishmentModule,...layoutModule,...checklistModule,...journalModule,...overviewModule,...stockModule,...dispatchModule,...productionModule,...wasteModule,...presentation,...core,...operations,...access,URLSearchParams,Intl,Date,console,localStorage:{getItem:()=>null,setItem(){}},location:{hash:''},document:{querySelector:node,querySelectorAll:()=>[],documentElement:{},body:{classList:{toggle(){}}}},window:{addEventListener(){}},confirm:()=>true});
+ const context=vm.createContext({...catalogModule,...dailyModule,...replenishmentModule,...layoutModule,...checklistModule,...journalModule,...overviewModule,...stockModule,...dispatchModule,...productionModule,...wasteModule,...presentation,...core,...operations,...access,URLSearchParams,Intl,Date,console,localStorage:{getItem:()=>null,setItem(){}},location:{hash:''},document:{querySelector:node,querySelectorAll:()=>[],documentElement:{},body:{classList:{toggle(){}}}},window:{addEventListener(){}},confirm:()=>true});
  let source=fs.readFileSync(new URL('../app.mjs',import.meta.url),'utf8').replace(/^import .*;\n/gm,'').replace(/boot\(\);\s*$/,'');
  vm.runInContext(source+`;user={id:'test'};profile={role:'owner',active:true,display_name:'Test'};stores=[{id:'finch',name:'Finch'}];store='finch';catalog=${JSON.stringify(catalog)};quantities={milk:3};dirty=true;render();`,context);
  assert.match(node('#navigation').innerHTML,/매장 발주/);assert.match(node('#products').innerHTML,/stepper/);assert.match(node('#categories').innerHTML,/디저트/);
- vm.runInContext("page='inventory';render();",context);assert.match(node('#view').innerHTML,/실제 자료 연결 준비 중/);assert.equal(node('#cart').innerHTML,'');
+ vm.runInContext("page='settlement';render();",context);assert.match(node('#view').innerHTML,/실제 자료 연결 준비 중/);assert.equal(node('#cart').innerHTML,'');
  vm.runInContext("page='order';render();",context);assert.match(node('#products').innerHTML,/value="3"/);assert.equal(vm.runInContext('dirty',context),true);
 });

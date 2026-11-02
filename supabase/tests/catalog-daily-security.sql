@@ -1,0 +1,33 @@
+begin;
+insert into auth.users(id,email) values('80000000-0000-4000-8000-000000000001','catalog-manager@example.invalid'),('80000000-0000-4000-8000-000000000002','catalog-employee@example.invalid');
+insert into public.kream_profiles(user_id,display_name,role,active) values('80000000-0000-4000-8000-000000000001','Catalog manager','manager',true),('80000000-0000-4000-8000-000000000002','Catalog employee','employee',true);
+insert into public.kream_stores(id,name) values('catalog-test','Catalog test'),('catalog-other','Other');
+insert into public.kream_memberships(user_id,store_id) values('80000000-0000-4000-8000-000000000001','catalog-test'),('80000000-0000-4000-8000-000000000002','catalog-test');
+select set_config('request.jwt.claim.sub','80000000-0000-4000-8000-000000000001',true);
+set local role authenticated;
+do $$ begin
+ perform public.kream_save_product('catalog-test-product','시험','Test','디저트','냉장','EA',true,true,false,null,'desserts',0);
+ perform public.kream_save_product('catalog-test-product','수정','Edited','디저트','냉장','EA',true,false,false,null,'desserts',1);
+ if not exists(select 1 from public.kream_catalog where id='catalog-test-product' and not active and revision=2) then raise exception 'FAIL edit/hide';end if;
+ begin perform public.kream_save_product('catalog-test-product','x','x','','','EA',true,true,false,null,null,1);raise exception 'FAIL stale edit';exception when serialization_failure then null;end;
+ perform public.kream_save_product('catalog-test-product','사용 중지','Archived','디저트','냉장','EA',true,false,true,null,'desserts',2);
+ if(select count(*) from public.kream_catalog_audit where product_id='catalog-test-product')<>3 then raise exception 'FAIL catalog audit';end if;
+ perform public.kream_save_daily_log('81000000-0000-4000-8000-000000000001','catalog-test',(now() at time zone 'America/Toronto')::date,true,'','','',null);
+ perform public.kream_save_daily_log('81000000-0000-4000-8000-000000000001','catalog-test',(now() at time zone 'America/Toronto')::date,true,'','','',null);
+ begin perform public.kream_save_daily_log(gen_random_uuid(),'catalog-test',(now() at time zone 'America/Toronto')::date,false,'Milk sold out','','',null);raise exception 'FAIL stale daily';exception when serialization_failure then null;end;
+ perform public.kream_save_daily_log('81000000-0000-4000-8000-000000000002','catalog-test',(now() at time zone 'America/Toronto')::date,false,'Milk sold out','','','81000000-0000-4000-8000-000000000001');
+ if(select count(*) from public.kream_daily_logs where store_id='catalog-test')<>2 then raise exception 'FAIL daily history';end if;
+ begin perform public.kream_save_daily_log(gen_random_uuid(),'catalog-other',current_date,true,'','','',null);raise exception 'FAIL other store daily';exception when insufficient_privilege then null;end;
+end $$;
+reset role;
+select set_config('request.jwt.claim.sub','80000000-0000-4000-8000-000000000002',true);
+set local role authenticated;
+do $$ begin
+ begin perform public.kream_save_product('catalog-test-product','x','x','','','EA',true,true,false,null,null,3);raise exception 'FAIL employee edit';exception when insufficient_privilege then null;end;
+ if exists(select 1 from public.kream_daily_logs) then raise exception 'FAIL employee daily read';end if;
+ begin perform public.kream_save_daily_log(gen_random_uuid(),'catalog-test',current_date,true,'','','',null);raise exception 'FAIL employee daily write';exception when insufficient_privilege then null;end;
+ if exists(select 1 from storage.buckets where id='kream-product-photos' and public) then raise exception 'FAIL photo bucket public';end if;
+end $$;
+reset role;
+rollback;
+select 'PASS: product add/edit/hide/discontinue, audit, stale edits, daily log access/history/retries; fixtures rolled back' as verification;

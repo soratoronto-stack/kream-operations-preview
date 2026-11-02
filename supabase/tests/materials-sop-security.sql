@@ -1,0 +1,57 @@
+begin;
+insert into auth.users(id,email) values('a0000000-0000-4000-8000-000000000001','materials-manager@example.invalid'),('a0000000-0000-4000-8000-000000000002','materials-staff@example.invalid'),('a0000000-0000-4000-8000-000000000003','sop-store@example.invalid'),('a0000000-0000-4000-8000-000000000004','sop-owner@example.invalid');
+insert into public.kream_profiles(user_id,display_name,role,active,factory_manager) values('a0000000-0000-4000-8000-000000000001','Materials manager','factory',true,true),('a0000000-0000-4000-8000-000000000002','Materials staff','factory',true,false),('a0000000-0000-4000-8000-000000000003','SOP store','employee',true,false),('a0000000-0000-4000-8000-000000000004','SOP owner','owner',true,false);
+select set_config('request.jwt.claim.sub','a0000000-0000-4000-8000-000000000001',true);
+set local role authenticated;
+do $$ begin
+ perform public.kream_save_material('a1000000-0000-4000-8000-000000000001','우유 시험','Milk test','유제품','Bag',true,true,'90000000-0000-4000-8000-000000000001',10,2,12,0);
+ perform public.kream_request_purchase('a2000000-0000-4000-8000-000000000001','a1000000-0000-4000-8000-000000000001',2);
+ perform public.kream_request_purchase('a2000000-0000-4000-8000-000000000001','a1000000-0000-4000-8000-000000000001',2);
+ perform public.kream_request_purchase('a2000000-0000-4000-8000-000000000002','a1000000-0000-4000-8000-000000000001',1);
+ if(select count(*) from public.kream_purchases where material_id='a1000000-0000-4000-8000-000000000001')<>2 then raise exception 'FAIL purchase idempotency';end if;
+ perform public.kream_mark_purchase('a2000000-0000-4000-8000-000000000001','purchased');
+ if(select on_hand from public.kream_materials where id='a1000000-0000-4000-8000-000000000001')<>10 then raise exception 'FAIL buying changed stock';end if;
+end $$;
+reset role;
+select set_config('request.jwt.claim.sub','a0000000-0000-4000-8000-000000000002',true);
+set local role authenticated;
+do $$ begin
+ if(select count(*) from public.kream_purchases where material_id='a1000000-0000-4000-8000-000000000001')<>1 then raise exception 'FAIL staff sees pending purchases';end if;
+ begin perform public.kream_request_purchase(gen_random_uuid(),'a1000000-0000-4000-8000-000000000001',2);raise exception 'FAIL staff requests purchase';exception when insufficient_privilege then null;end;
+ begin perform public.kream_save_supplier(gen_random_uuid(),'x',true,0);raise exception 'FAIL staff supplier edit';exception when insufficient_privilege then null;end;
+ perform public.kream_receive_purchase('a3000000-0000-4000-8000-000000000001','a2000000-0000-4000-8000-000000000001',1);
+ perform public.kream_receive_purchase('a3000000-0000-4000-8000-000000000001','a2000000-0000-4000-8000-000000000001',1);
+ if(select on_hand from public.kream_materials where id='a1000000-0000-4000-8000-000000000001')<>11 then raise exception 'FAIL receipt duplicated';end if;
+ if not exists(select 1 from public.kream_purchase_receipts where id='a3000000-0000-4000-8000-000000000001' and recorded_name='Materials staff') then raise exception 'FAIL receipt actor';end if;
+ begin perform public.kream_receive_purchase(gen_random_uuid(),'a2000000-0000-4000-8000-000000000001',2);raise exception 'FAIL over receipt';exception when invalid_parameter_value then null;end;
+ perform public.kream_receive_purchase('a3000000-0000-4000-8000-000000000002','a2000000-0000-4000-8000-000000000001',1);
+ if(select status from public.kream_purchases where id='a2000000-0000-4000-8000-000000000001')<>'received' then raise exception 'FAIL full receipt status';end if;
+ begin perform public.kream_save_material('a1000000-0000-4000-8000-000000000001','우유 시험','Milk test','유제품','Bag',true,true,'90000000-0000-4000-8000-000000000001',0,2,12,1);raise exception 'FAIL stale material count';exception when serialization_failure then null;end;
+ perform public.kream_save_material('a1000000-0000-4000-8000-000000000001','우유 시험','Milk test','유제품','Bag',true,true,'90000000-0000-4000-8000-000000000001',11,2,12,3);
+end $$;
+reset role;
+select set_config('request.jwt.claim.sub','a0000000-0000-4000-8000-000000000004',true);
+set local role authenticated;
+insert into public.kream_guides(id,kind,title_ko,body_ko,published,audience) values('a4000000-0000-4000-8000-000000000001','sop','Factory SOP test','Factory internal test',true,'factory'),('a4000000-0000-4000-8000-000000000002','sop','Store SOP test','Store internal test',true,'store');
+reset role;
+select set_config('request.jwt.claim.sub','a0000000-0000-4000-8000-000000000003',true);
+set local role authenticated;
+do $$ begin
+ if exists(select 1 from public.kream_materials) then raise exception 'FAIL store factory stock read';end if;
+ begin perform body_ko from public.kream_guides;raise exception 'FAIL unaudited SOP body';exception when insufficient_privilege then null;end;
+ begin perform public.kream_open_guide('a4000000-0000-4000-8000-000000000001');raise exception 'FAIL factory SOP leaked';exception when insufficient_privilege then null;end;
+ if public.kream_open_guide('a4000000-0000-4000-8000-000000000002')->>'body_ko'<>'Store internal test' then raise exception 'FAIL store SOP';end if;
+ perform public.kream_open_guide('a4000000-0000-4000-8000-000000000002');
+ if(select count(*) from public.kream_guide_views where guide_id='a4000000-0000-4000-8000-000000000002')<>1 then raise exception 'FAIL view minute dedup';end if;
+end $$;
+reset role;
+select set_config('request.jwt.claim.sub','a0000000-0000-4000-8000-000000000002',true);
+set local role authenticated;
+do $$ begin
+ begin perform public.kream_open_guide('a4000000-0000-4000-8000-000000000002');raise exception 'FAIL store SOP leaked to factory';exception when insufficient_privilege then null;end;
+ perform public.kream_open_guide('a4000000-0000-4000-8000-000000000001');
+ if not exists(select 1 from public.kream_guide_views where guide_id='a4000000-0000-4000-8000-000000000001' and recorded_name='Materials staff') then raise exception 'FAIL SOP viewer name';end if;
+end $$;
+reset role;
+rollback;
+select 'PASS: manager purchases, staff stock and receipts, no stock increase on buying, partial/full receipt and retry, SOP audience/body protection/access log; fixtures rolled back' as verification;

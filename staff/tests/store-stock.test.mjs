@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {stockNumbers} from '../store-stock.mjs';
+test('stock entry distinguishes unknown from zero and validates decimal quantities',()=>{assert.deepEqual(stockNumbers('',0),{on_hand:null,minimum:0});assert.deepEqual(stockNumbers('0','6'),{on_hand:0,minimum:6});for(const v of [-1,'NaN',0.0001,Infinity])assert.throws(()=>stockNumbers(v,2),/STOCK_INVALID/);});
