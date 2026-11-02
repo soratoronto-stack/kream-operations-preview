@@ -8,3 +8,5 @@
 .allocation-card small{display:block;color:var(--muted);margin-top:6px}.allocation-total{font-size:28px}.allocation-total small{display:inline;font-size:14px}.allocation-stores{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}.allocation-stores span{background:#efefe6;padding:10px 14px;border-radius:8px}.production-team{margin-top:26px}
 
 .stock-editor{font-size:12px;border-top:1px solid #e6e4db;margin-top:8px;padding-top:8px}.stock-editor summary{cursor:pointer}.stock-editor input{padding:7px;font-size:13px;margin:3px 0}.stock-editor button{font-size:12px;padding:7px}.stock-editor label{font-size:12px;margin-top:7px}
+
+.overview-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.overview-stats .panel{margin:8px 0}.overview-stats h2{font-size:30px;margin:8px 0}@media(max-width:600px){.overview-stats{grid-template-columns:1fr}}
