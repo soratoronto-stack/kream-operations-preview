@@ -9,7 +9,7 @@ export const previewRoles=[
 ];
 const shared=['sop','manual'];
 const store=['order','history','receiving',...shared,'waste'];
-const factory=['production','dispatch','inventory','receiving',...shared,'waste'];
+const factory=['production','productionlog','dispatch','inventory','receiving',...shared,'waste'];
 export function visiblePages(role){if(role==='owner')return null;if(role==='employee')return store;if(role==='manager')return ['catalog',...store];if(role==='midland_owner')return [...store,'settlement'];if(role==='factory_staff'||role==='factory')return factory;if(role==='factory_manager')return [...factory,'suppliers'];return [];}
 export function canPreview(profile,role){return profile?.active===true&&profile.role==='owner'&&previewRoles.some(r=>r[0]===role)&&role!=='owner';}
 export function isFactoryRole(role){return ['factory','factory_staff','factory_manager'].includes(role);}

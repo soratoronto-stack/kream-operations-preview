@@ -1,0 +1,3 @@
+export function workTime(value,lang='ko'){return new Intl.DateTimeFormat(lang==='ko'?'ko-KR':'en-CA',{timeZone:'America/Toronto',dateStyle:'medium',timeStyle:'medium'}).format(new Date(value));}
+export function latestChecks(events){const m=new Map();for(const e of events)if(!m.has(e.item_id)||Number(e.sequence)>Number(m.get(e.item_id).sequence))m.set(e.item_id,e);return m;}
+export function productionTotals(rows){const map=new Map();for(const r of rows){const key=JSON.stringify([r.product_id,r.order_unit]),v=map.get(key)||{...r,quantity:0};v.quantity=Math.round((v.quantity+Number(r.quantity))*1000)/1000;map.set(key,v);}return [...map.values()];}

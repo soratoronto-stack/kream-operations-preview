@@ -1,0 +1,31 @@
+begin;
+insert into auth.users(id,email) values('70000000-0000-4000-8000-000000000001','base-employee@example.invalid'),('70000000-0000-4000-8000-000000000002','base-manager@example.invalid');
+insert into public.kream_profiles(user_id,display_name,role,active) values('70000000-0000-4000-8000-000000000001','Base employee','employee',true),('70000000-0000-4000-8000-000000000002','Base manager','manager',true);
+insert into public.kream_stores(id,name) values('base-test','Base test'),('base-other','Other');
+insert into public.kream_memberships(user_id,store_id) values('70000000-0000-4000-8000-000000000001','base-test'),('70000000-0000-4000-8000-000000000002','base-test');
+insert into public.kream_catalog(id,name_ko,name_en,order_unit,unit_confirmed) values('base-product','우유 시험','Milk test','Bag',true);
+set local role anon;
+do $$ begin begin perform count(*) from public.kream_stock_rules;raise exception 'FAIL anon rules';exception when insufficient_privilege then null;end;end $$;
+reset role;
+select set_config('request.jwt.claim.sub','70000000-0000-4000-8000-000000000002',true);
+set local role authenticated;
+do $$ begin
+ perform public.kream_save_stock_plan('base-test','base-product',4,2,6,10,array[5,6,0],0,0);
+ if not exists(select 1 from public.kream_stock_rules where store_id='base-test' and weekday_base=6 and weekend_base=10 and weekend_days=array[5,6,0]) then raise exception 'FAIL base save';end if;
+ begin perform public.kream_save_stock_plan('base-test','base-product',0,2,6,10,array[5,6,0],0,1);raise exception 'FAIL stale stock';exception when serialization_failure then null;end;
+ begin perform public.kream_save_stock_plan('base-test','base-product',0,2,1,10,array[5,6,0],1,1);raise exception 'FAIL base below minimum';exception when invalid_parameter_value then null;end;
+ begin perform public.kream_save_stock_plan('base-other','base-product',4,2,6,10,array[5,6,0],0,0);raise exception 'FAIL wrong store';exception when insufficient_privilege then null;end;
+end $$;
+reset role;
+select set_config('request.jwt.claim.sub','70000000-0000-4000-8000-000000000001',true);
+set local role authenticated;
+do $$ begin
+ perform public.kream_save_stock_plan('base-test','base-product',3,2,6,10,array[5,6,0],1,1);
+ if(select on_hand from public.kream_stock where store_id='base-test' and product_id='base-product')<>3 then raise exception 'FAIL staff count';end if;
+ begin perform public.kream_save_stock_plan('base-test','base-product',0,2,7,10,array[5,6,0],2,1);raise exception 'FAIL staff rule change';exception when insufficient_privilege then null;end;
+ if(select on_hand from public.kream_stock where store_id='base-test' and product_id='base-product')<>3 then raise exception 'FAIL atomic rejection';end if;
+ begin perform public.kream_save_stock_plan('base-test','base-product',3,2,6,10,array[5,6,0],2,0);raise exception 'FAIL stale rule';exception when serialization_failure then null;end;
+end $$;
+reset role;
+rollback;
+select 'PASS: stock bases, manager-only settings, employee counts, store scope, stale-write protection, atomicity; fixtures rolled back' as verification;
