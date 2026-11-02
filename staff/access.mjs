@@ -20,3 +20,9 @@ export function scopePreview(role,storeId,{orders=[],receipts=[],guides=[]}){con
  })};}
 
 export function orderedPages(pages,role){if(isFactoryRole(role)){const rank=['production','dispatch','productionlog','inventory','purchases','materialreceiving','waste','sop'];return [...pages].sort((a,b)=>(rank.indexOf(a[0])<0?999:rank.indexOf(a[0]))-(rank.indexOf(b[0])<0?999:rank.indexOf(b[0])));}if(!['employee','manager','midland_owner'].includes(role))return pages;const order=['manual','receiving','order','history','waste','daily','sop','settlement'];return [...pages].sort((a,b)=>(order.indexOf(a[0])<0?999:order.indexOf(a[0]))-(order.indexOf(b[0])<0?999:order.indexOf(b[0])));}
+
+export function navigationGroups(pages,role){
+ if(role!=='owner')return [{key:'role',ko:'',en:'',pages:orderedPages(pages,role).filter(p=>visiblePages(role)?.includes(p[0]))}];
+ const groups=[['overview','','',['overview']],['stores','매장 운영','Store operations',['manual','receiving','order','history','waste','daily','sop','settlement']],['factory','공장 운영','Factory operations',['production','dispatch','productionlog','inventory','purchases','materialreceiving']]];
+ return groups.map(([key,ko,en,ids])=>({key,ko,en,pages:ids.map(id=>pages.find(p=>p[0]===id)).filter(Boolean)}));
+}
