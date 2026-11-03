@@ -46,3 +46,9 @@ export async function submitSharedBasket(db,draft){
  const {data,error}=await db.rpc('kream_submit_store_basket',{draft_id:draft.id,expected_revision:draft.revision});
  if(error)throw error;if(!data)throw new Error('EMPTY_SUBMIT_RESPONSE');return data;
 }
+
+// Compare item values, independently of JSON object key order from Postgres JSONB.
+export function sameBasketItems(left,right){
+ const canonical=items=>JSON.stringify(items.map(i=>[i.product_id,Number(i.quantity)]).sort((a,b)=>a[0].localeCompare(b[0])));
+ return canonical(left)===canonical(right);
+}
