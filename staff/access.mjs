@@ -24,6 +24,6 @@ export function orderedPages(pages,role){if(isFactoryRole(role)){const rank=['pr
 
 export function navigationGroups(pages,role){
  if(role!=='owner')return [{key:'role',ko:'',en:'',pages:orderedPages(pages,role).filter(p=>visiblePages(role)?.includes(p[0]))}];
- const groups=[['overview','','',['overview']],['stores','매장 운영','Store operations',['manual','receiving','order','history','waste','daily','sop','settlement']],['factory','공장 운영','Factory operations',['production','dispatch','productionlog','inventory','purchases','materialreceiving']]];
+ const groups=[['overview','','',['overview']],['stores','매장 운영','Store operations',['manual','receiving','order','history','waste','daily','sop','settlement']],['factory','공장 운영','Factory operations',['production','dispatch','productionlog','inventory','purchases','materialreceiving']],['settings','설정','Settings',['accounts']]];
  return groups.map(([key,ko,en,ids])=>({key,ko,en,pages:ids.map(id=>pages.find(p=>p[0]===id)).filter(Boolean)}));
 }
