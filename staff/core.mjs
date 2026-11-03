@@ -37,3 +37,12 @@ export function aggregate(orders) {
   }
   return [...map.values()];
 }
+
+export async function saveSharedBasket(db,previous,payload){
+ const {data,error}=await db.rpc('kream_save_store_basket',{target_store:payload.store_id,basket_id:previous?.id||null,previous_items:previous?.items||[],new_items:payload.items,previous_note:previous?.note||'',new_note:payload.note,previous_date:previous?.delivery_date||payload.delivery_date,new_date:payload.delivery_date});
+ if(error)throw error;if(!data?.id)throw new Error('EMPTY_BASKET_RESPONSE');return data;
+}
+export async function submitSharedBasket(db,draft){
+ const {data,error}=await db.rpc('kream_submit_store_basket',{draft_id:draft.id,expected_revision:draft.revision});
+ if(error)throw error;if(!data)throw new Error('EMPTY_SUBMIT_RESPONSE');return data;
+}
