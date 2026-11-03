@@ -2,8 +2,8 @@ import {orderReference} from './presentation.mjs?v=20261103-clean-confirmation';
 import {workTime} from './work-records.mjs?v=20261102-drag';
 export function dispatchRemaining(order,dispatches){const sum={};for(const d of dispatches.filter(d=>d.order_id===order.id))for(const i of d.kream_dispatch_items||[])sum[i.product_id]=(sum[i.product_id]||0)+Number(i.quantity);return (order.kream_order_items||[]).map(i=>({...i,dispatched:Math.round((sum[i.product_id]||0)*1000)/1000,remaining:Math.max(0,Math.round((Number(i.quantity)-(sum[i.product_id]||0))*1000)/1000)}));}
 export function dispatchPayload(rows,entries){return rows.filter(r=>r.remaining>0).map(r=>{const v=entries[r.product_id];if(v==null||v==='')throw Error('DISPATCH_UNCHECKED');const n=Number(v);if(!Number.isInteger(n)||n<0||n>r.remaining)throw Error('INVALID_DISPATCH');return {product_id:r.product_id,quantity:n};}).sort((a,b)=>a.product_id.localeCompare(b.product_id));}
-export const allocationCategory=p=>['whole-strawberry-4','reservation-cake'].includes(p.id)||p.subgroup==='홀케이크'||p.subgroup==='홀케익'?'홀케익':p.category||'기타';
-export function allocationChoices(catalog,category,subgroup='',store=''){return catalog.filter(p=>p.unit_confirmed&&p.active!==false&&!p.archived&&(!store||store==='midland'||p.subgroup!=='크림밤')&&(!category||allocationCategory(p)===category)&&(!subgroup||(p.subgroup||'기타')===subgroup));}
+export const allocationCategory=p=>['whole-strawberry-4','reservation-cake'].includes(p.id)||p.subgroup==='홀케이크'||p.subgroup==='홀케익'?'홀케익':p.factory_subgroup&&p.production_team?({breads:'빵류',desserts:'디저트류',cookies:'쿠키류',other:'기타 생산품'}[p.production_team]||p.category):p.category||'기타';
+export function allocationChoices(catalog,category,subgroup='',store=''){return catalog.filter(p=>p.unit_confirmed&&p.active!==false&&!p.archived&&(!store||store==='midland'||p.subgroup!=='크림밤')&&(!category||allocationCategory(p)===category)&&(!subgroup||(p.factory_subgroup??p.subgroup??'기타')===subgroup));}
 let extraCategory='홀케익',extraSubcategory='';
 let values={},notes={},attempt=null,extraAttempt=null,extraValues={},revision=0;
 export function hasDispatchEdits(){return !!attempt||!!extraAttempt||Object.values(extraValues).some(Boolean)||Object.values(values).some(v=>Object.values(v).some(q=>q!==''))||Object.values(notes).some(Boolean);}
@@ -15,7 +15,7 @@ export async function renderDispatch(host,c){const token=++revision,{t,esc,db,da
  function drawAllocationChoices(){
  const all=allocationChoices(catalog,'','',destination.value),groups=[...new Set(all.map(allocationCategory))];if(!groups.includes(extraCategory)){extraCategory=groups.includes('홀케익')?'홀케익':groups[0]||'';extraSubcategory='';}
  main.innerHTML=groups.map(g=>`<option value="${esc(g)}" ${g===extraCategory?'selected':''}>${esc(g==='홀케익'?t('홀케익','Whole cakes'):g)}</option>`).join('');
- const subs=[...new Set(allocationChoices(all,extraCategory).map(p=>p.subgroup||'기타'))];if(!subs.includes(extraSubcategory))extraSubcategory='';
+ const subs=[...new Set(allocationChoices(all,extraCategory).map(p=>p.factory_subgroup??p.subgroup??'기타'))];if(!subs.includes(extraSubcategory))extraSubcategory='';
  sub.innerHTML=`<option value="">${t('전체','All')}</option>`+subs.map(g=>`<option value="${esc(g)}" ${g===extraSubcategory?'selected':''}>${esc(g)}</option>`).join('');extra.querySelector('#allocationSubgroupLabel').hidden=extraCategory==='홀케익';
  extra.querySelector('#allocationProductLabel').textContent=extraCategory==='홀케익'?t('소분류·품목','Cake type'):t('품목','Product');
  const choices=allocationChoices(all,extraCategory,extraCategory==='홀케익'?'':extraSubcategory),chosen=extraAttempt?.target_product||extraValues.product||'';
