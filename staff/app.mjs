@@ -14,7 +14,7 @@ import {stockFields,bindStock} from './store-stock.mjs?v=20261102-whole-quantity
 import {renderDispatch} from './dispatch.mjs?v=20261102-whole-quantity';
 import {renderProduction} from './production.mjs?v=20261102-drag';
 import {renderWaste,todayToronto} from './waste.mjs?v=20261102-whole-quantity';
-import {navigationGroups,orderedPages,previewRoles,visiblePages,canPreview,isFactoryRole,scopePreview} from './access.mjs?v=20261102-owner-nav';
+import {navigationGroups,orderedPages,previewRoles,visiblePages,canPreview,isFactoryRole,scopePreview} from './access.mjs?v=20261102-general-manager';
 import {renderReceiving,renderGuides,hasModuleEdits,clearModuleState} from './operations.mjs?v=20261102-whole-quantity';
 import {artwork,deliveryLabel,filterProducts,frequentIds} from './presentation.mjs';
 import {tomorrowToronto,validItems,saveDraft,submitDraft,aggregate} from './core.mjs';
@@ -50,9 +50,9 @@ function renderAuth(){
 $('#myName').onclick=()=>{const value=prompt(t('기록에 남길 내 이름','My name on work records'),profile?.display_name||'');if(value===null)return;run(async()=>{const saved=await result(db.rpc('kream_set_display_name',{new_name:value}));profile={...profile,display_name:saved};say(t('앞으로 작성하는 기록에 새 이름이 남습니다. 과거 기록의 이름은 유지됩니다.','New records use your updated name; past records retain their original name.'));});};
 async function run(fn){if(busy)return;if(isPreview()){say(t('권한 미리보기에서는 저장·발주·입고 확인을 실행하지 않아요. 실제 화면으로 돌아가 주세요.','Preview mode cannot save, submit or receive. Return to the live workspace.'),true);return;}setBusy(true);try{await fn();}catch(e){failure(e);}finally{setBusy(false);}}
 function isPreview(){return canPreview(profile,previewRole);}
-function screenRole(){return isPreview()?previewRole:profile?.role==='factory'&&profile.factory_manager?'factory_manager':profile?.role;}
-function screenProfile(){if(!isPreview())return profile;const selected=previewRoles.find(r=>r[0]===previewRole);return {...profile,role:isFactoryRole(previewRole)?'factory':previewRole,display_name:t(selected[1],selected[2])+' · '+t('미리보기','Preview')};}
-function screenStores(){return isPreview()&&!isFactoryRole(previewRole)?stores.filter(s=>s.id===store):stores;}
+function screenRole(){return isPreview()?previewRole:profile?.role==='manager'&&profile.general_manager?'general_manager':profile?.role==='factory'&&profile.factory_manager?'factory_manager':profile?.role;}
+function screenProfile(){if(!isPreview())return profile;const selected=previewRoles.find(r=>r[0]===previewRole);return {...profile,role:isFactoryRole(previewRole)?'factory':previewRole==='general_manager'?'manager':previewRole,general_manager:previewRole==='general_manager',display_name:t(selected[1],selected[2])+' · '+t('미리보기','Preview')};}
+function screenStores(){return isPreview()&&!isFactoryRole(previewRole)&&previewRole!=='general_manager'?stores.filter(s=>s.id===store):stores;}
 function snapshotOwner(){return {store,date,productionDate,overviewDate,note,dirty,uncertain,quantities:{...quantities},orders,stock,draft,category,search,subgroup,filter,page,cartOpen,receipts,guides,receiptOrders,waste,dispatches};}
 function restoreOwner(){if(!ownerView)return;({store,date,productionDate,overviewDate,note,dirty,uncertain,quantities,orders,stock,draft,category,search,subgroup,filter,page,cartOpen,receipts,guides,receiptOrders,waste,dispatches}=ownerView);ownerView=null;previewRole='';clearModuleState();}
 function changePreview(role,targetStore=store){
@@ -74,7 +74,7 @@ async function loadIdentity(){
  const epoch=++generation;const {data,error}=await db.auth.getUser();if(epoch!==generation)return;
  if(error||!data.user){previewRole='';ownerView=null;clearModuleState();user=null;profile=null;stores=[];catalog=[];receipts=[];guides=[];receiptOrders=[];waste=[];dispatches=[];layoutRows=[],stockRules=[];catalogAll=[];photoURLs={};deliveryPrices=[];draft=null;orders=[];quantities={};dirty=false;uncertain=false;return;}
  const freshUser=data.user;if(user?.id!==freshUser.id){previewRole='';ownerView=null;clearModuleState();}
- const freshProfile=await result(db.from('kream_profiles').select('user_id,display_name,role,active,factory_manager').eq('user_id',freshUser.id).maybeSingle());
+ const freshProfile=await result(db.from('kream_profiles').select('user_id,display_name,role,active,factory_manager,general_manager').eq('user_id',freshUser.id).maybeSingle());
  if(epoch!==generation)return;user=freshUser;profile=freshProfile;
  if(!profile?.active){stores=[];catalog=[];orders=[];return;}
  const s=await result(db.from('kream_stores').select('id,name').eq('active',true).order('name'));await loadCatalog();
