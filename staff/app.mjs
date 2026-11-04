@@ -16,7 +16,7 @@ import {renderCatalogTools,openProduct,signedPhotos,canManageProducts} from './c
 import {renderDailyLog} from './daily-log.mjs?v=20261102-whole-quantity';
 import {recommendation} from './replenishment.mjs?v=20261102-drag';
 import {renderProductionLog} from './production-log.mjs?v=20261104-factory-manual-box';
-import {renderChecklist} from './checklist.mjs?v=20261104-factory-manual-box';
+import {renderChecklist} from './checklist.mjs?v=20261104-manual-compact';
 import {sortCatalog,ordered,groupKey,renderLayoutEditor} from './order-layout.mjs?v=20261104-drag-only';
 import {renderOverview} from './overview.mjs?v=20261102-drag';
 import {stockFields,bindStock} from './store-stock.mjs?v=20261104-factory-manual-box';
@@ -24,7 +24,7 @@ import {renderDispatch} from './dispatch.mjs?v=20261104-factory-manual-box';
 import {renderProduction} from './production.mjs?v=20261104-factory-manual-box';
 import {renderWaste,todayToronto} from './waste.mjs?v=20261102-whole-quantity';
 import {navigationGroups,orderedPages,previewRoles,visiblePages,canPreview,isFactoryRole,scopePreview} from './access.mjs?v=20261104-factory-manual-box';
-import {renderReceiving,renderGuides,hasModuleEdits,clearModuleState} from './operations.mjs?v=20261104-drag-only';
+import {renderReceiving,renderGuides,hasModuleEdits,clearModuleState} from './operations.mjs?v=20261104-manual-compact';
 import {artwork,deliveryLabel,filterProducts,frequentIds,favoriteIds,orderReference} from './presentation.mjs?v=20261103-favorite-stars';
 import {tomorrowToronto,validItems,sameBasketItems,saveSharedBasket as saveDraft,submitSharedBasket as submitDraft,aggregate} from './core.mjs?v=20261103-submit-fix';
 const $=s=>document.querySelector(s), esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
