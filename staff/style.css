@@ -61,3 +61,14 @@
 .order-management-tools #addOrderProduct,.order-management-tools #arrangeOrder{font-size:11px;min-height:30px;padding:6px 9px}
 .order-management-tools #catalogTools>.actions>details{font-size:11px;min-height:30px;padding:6px 9px;border:1px solid var(--line);border-radius:9px;background:#fffaf3}
 .order-management-tools:has(#productForm),.order-management-tools:has(.arrange-editor){display:block}
+
+.order-quick-actions{align-items:center}.order-quick-actions .recommendation-tools{margin:0;flex-wrap:nowrap}.order-quick-actions #applyRecommendations{border-radius:30px;font-size:inherit;min-height:40px;padding:10px 14px}@media(max-width:700px){.order-quick-actions #applyRecommendations{font-size:12px;min-height:34px;padding:8px 10px}}
+
+/* A subcategory shares its tint with the product cards below it. */
+.subcategory-chip button[data-group]{background:var(--group-bg,#eeeee3);color:#32342d;border:2px solid transparent}
+.subcategory-chip button[data-group].active{background:var(--group-bg,#eeeee3);color:#32342d;border-color:var(--group-edge,#59694c);box-shadow:0 0 0 1px var(--group-edge,#59694c);font-weight:700}
+.grouped-product:not(.stock-low){border-color:var(--group-edge,var(--line));border-top-width:3px}
+.grouped-product:not(.stock-low) .card-body{background:var(--group-bg,#fff)}
+.grouped-product.stock-low .card-body{background:#fff4f0}
+
+.order-quick-actions .recommendation-help{position:relative}.order-quick-actions .recommendation-help[open]>div{position:absolute;right:0;top:100%;width:min(320px,calc(100vw - 40px));max-width:none;z-index:4;box-shadow:0 6px 18px #0002}
