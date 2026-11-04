@@ -1,6 +1,6 @@
 import {productOrderView,productOrderTools,bindProductOrder} from './product-drag.mjs?v=20261103-item-drag';
 import {renderClassification} from './classification.mjs?v=20261103-classification-select';
-import {workplaceChoices,renderWorkplaces} from './workplaces.mjs?v=20261103-workplaces';
+import {workplaceChoices,renderWorkplaces} from './workplaces.mjs?v=20261103-workplace-pending-fix';
 import {renderAccounts} from './accounts.mjs?v=20261103-combined';
 import {quantityStep} from './quantity-step.mjs?v=20261102-whole-quantity';
 import {availableForStore,storeCatalog} from './store-availability.mjs?v=20261102-midland-bombs';
