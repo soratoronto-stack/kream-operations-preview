@@ -1,3 +1,4 @@
+import {hasProductOrderEdits,clearProductOrder} from './product-drag.mjs?v=20261103-item-drag';
 import {hasClassificationEdits,clearClassificationState} from './classification.mjs?v=20261103-classification-select';
 import {orderReference} from './presentation.mjs?v=20261103-clean-confirmation';
 import {hasAccountEdits,clearAccountState} from './accounts.mjs?v=20261103-combined';
@@ -20,8 +21,8 @@ export function receiptPayload(order,receipts,values,dispatches=[]){const rows=o
 export function canEditGuide(profile,guide){return profile?.role==='owner'||profile?.role==='manager'&&guide?.store_id!=null;}
 let receiptOrder='',receiptValues={},receiptNote='',receiptAttempt=null;
 let editing=null,guideDirty=false,guideSearch='';
-export function hasModuleEdits(){return hasClassificationEdits()||hasAccountEdits()||hasSubcategoryEdits()||hasReviewEdits()||hasSettlementEdits()||hasMaterialEdits()||hasCatalogEdits()||hasDailyEdits()||hasLayoutEdits()||hasChecklistEdits()||hasProductionEdits()||hasStockEdits()||hasDispatchEdits()||hasWasteEdits()||guideDirty||!!receiptAttempt||Object.values(receiptValues).some(q=>Number(q)>0)||!!receiptNote;}
-export function clearModuleState(){clearClassificationState();clearAccountState();clearSubcategoryState();clearReviewState();clearSettlementState();clearMaterialState();clearCatalogState();clearDailyState();clearLayoutState();clearChecklistState();clearProductionState();clearStockEdits();clearDispatchState();clearWasteState();receiptOrder='';receiptValues={};receiptNote='';receiptAttempt=null;editing=null;guideDirty=false;guideSearch='';}
+export function hasModuleEdits(){return hasProductOrderEdits()||hasClassificationEdits()||hasAccountEdits()||hasSubcategoryEdits()||hasReviewEdits()||hasSettlementEdits()||hasMaterialEdits()||hasCatalogEdits()||hasDailyEdits()||hasLayoutEdits()||hasChecklistEdits()||hasProductionEdits()||hasStockEdits()||hasDispatchEdits()||hasWasteEdits()||guideDirty||!!receiptAttempt||Object.values(receiptValues).some(q=>Number(q)>0)||!!receiptNote;}
+export function clearModuleState(){clearProductOrder();clearClassificationState();clearAccountState();clearSubcategoryState();clearReviewState();clearSettlementState();clearMaterialState();clearCatalogState();clearDailyState();clearLayoutState();clearChecklistState();clearProductionState();clearStockEdits();clearDispatchState();clearWasteState();receiptOrder='';receiptValues={};receiptNote='';receiptAttempt=null;editing=null;guideDirty=false;guideSearch='';}
 export function renderReceiving(host,c){
  const {orders,receipts,profile,stores,store,t,esc,act,db,reload,say}=c;
  const list=orders.filter(o=>o.status!=='cancelled');if(!list.some(o=>o.id===receiptOrder)){receiptOrder=list[0]?.id||'';receiptValues={};receiptNote='';}
