@@ -1,4 +1,4 @@
-import {subcategoryStyle} from './category-colors.mjs?v=20261104-order-colors';
+import {subcategoryStyle,subcategoriesFor} from './category-colors.mjs?v=20261104-pantry-items';
 import {ordered,groupKey,canArrange,moved} from './order-layout.mjs?v=20261102-drag';
 let draft=null;
 export const hasSubcategoryEdits=()=>!!draft?.changed;
@@ -7,7 +7,7 @@ export function mergeSubgroups(all,subset){const keys=new Set(subset);let i=0;re
 export function subcategoryMarkup(c){
  const {category,catalog,layout,store,t,esc,profile,subgroup}=c;
  if(!category)return '';
- const keys=ordered([...new Set(catalog.map(groupKey))],layout.subgroup_order);
+ const keys=ordered([...new Set([...catalog.map(groupKey),...subcategoriesFor(catalog,category).map(g=>JSON.stringify([category,g]))])],layout.subgroup_order);
  const groups=keys.filter(k=>JSON.parse(k)[0]===category&&JSON.parse(k)[1]);
  const editing=draft?.store===store&&draft?.category===category;
  const list=editing?draft.groups:groups;
@@ -17,7 +17,7 @@ export function bindSubcategoryDrag(host,c){
  const {catalog,layout,category,store,t,db,act,say,redraw,reload}=c;
  host.querySelector('#editSubcategory')?.addEventListener('click',()=>{
   if(hasSubcategoryEdits()&&!confirm(t('다른 카테고리의 순서 변경을 취소할까요?','Discard changes in the other category?')))return;
-  const all=ordered([...new Set(catalog.map(groupKey))],layout.subgroup_order);
+  const all=ordered([...new Set([...catalog.map(groupKey),...subcategoriesFor(catalog,category).map(g=>JSON.stringify([category,g]))])],layout.subgroup_order);
   draft={store,category,revision:layout.revision||0,all,groups:all.filter(k=>JSON.parse(k)[0]===category&&JSON.parse(k)[1]),changed:false,categories:layout.category_order||[],products:layout.product_order||[]};redraw();
  });
  host.querySelector('#cancelSubcategory')?.addEventListener('click',()=>{clearSubcategoryState();redraw();});
