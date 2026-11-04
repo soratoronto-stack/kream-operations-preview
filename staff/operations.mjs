@@ -1,4 +1,4 @@
-import {hasExternalEdits,clearExternalState} from './external-dispatch.mjs?v=20261104-external';
+import {hasExternalEdits,clearExternalState} from './external-dispatch.mjs?v=20261104-destinations';
 import {hasFinishedEdits,clearFinishedState} from './finished-stock.mjs?v=20261103-finished-stock';
 import {hasProductOrderEdits,clearProductOrder} from './product-drag.mjs?v=20261103-item-drag';
 import {hasClassificationEdits,clearClassificationState} from './classification.mjs?v=20261103-classification-select';
