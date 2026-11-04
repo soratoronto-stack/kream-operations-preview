@@ -1,6 +1,6 @@
-import {halfBoxCount,unitLabel,quantityLabel,boxAmount} from './packing.mjs?v=20261104-box-consistency';
-import {productionChoices,productionGroup} from './production-log.mjs?v=20261104-box-consistency';
-import {teamLabels} from './production.mjs?v=20261104-box-consistency';
+import {halfBoxCount,unitLabel,quantityLabel,boxAmount} from './packing.mjs?v=20261104-factory-manual-box';
+import {productionChoices,productionGroup} from './production-log.mjs?v=20261104-factory-manual-box';
+import {teamLabels} from './production.mjs?v=20261104-factory-manual-box';
 import {workTime} from './work-records.mjs?v=20261102-drag';
 let group='',subgroup='',search='',drafts={},attempt=null,generation=0;
 export const hasFinishedEdits=()=>!!attempt||Object.keys(drafts).length>0;

@@ -1,4 +1,4 @@
-import {halfBoxCount,unitLabel,quantityLabel,boxAmount} from './packing.mjs?v=20261104-box-consistency';
+import {halfBoxCount,unitLabel,quantityLabel,boxAmount} from './packing.mjs?v=20261104-factory-manual-box';
 import {workTime} from './work-records.mjs?v=20261102-drag';
 export const reasonChoices=[['stock_shortage','재고 부족','Stock shortage'],['dispatch_damage','출고 중 파손','Dispatch damage'],['other','기타','Other']];
 let drafts={},attempts={},errors={},saving=false;

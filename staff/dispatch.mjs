@@ -1,6 +1,6 @@
-import {halfBoxCount,unitLabel,quantityLabel,boxAmount} from './packing.mjs?v=20261104-box-consistency';
-import {renderExternalDispatch} from './external-dispatch.mjs?v=20261104-box-consistency';
-import {unshippedItem,unshippedTools,bindUnshipped,hasUnshippedEdits,clearUnshippedState} from './unshipped.mjs?v=20261104-box-consistency';
+import {halfBoxCount,unitLabel,quantityLabel,boxAmount} from './packing.mjs?v=20261104-factory-manual-box';
+import {renderExternalDispatch} from './external-dispatch.mjs?v=20261104-factory-manual-box';
+import {unshippedItem,unshippedTools,bindUnshipped,hasUnshippedEdits,clearUnshippedState} from './unshipped.mjs?v=20261104-factory-manual-box';
 import {orderReference} from './presentation.mjs?v=20261103-clean-confirmation';
 import {workTime} from './work-records.mjs?v=20261102-drag';
 export function dispatchRemaining(order,dispatches){const sum={};for(const d of dispatches.filter(d=>d.order_id===order.id))for(const i of d.kream_dispatch_items||[])sum[i.product_id]=(sum[i.product_id]||0)+Number(i.quantity);return (order.kream_order_items||[]).map(i=>({...i,dispatched:Math.round((sum[i.product_id]||0)*1000)/1000,remaining:Math.max(0,Math.round((Number(i.quantity)-(sum[i.product_id]||0))*1000)/1000)}));}

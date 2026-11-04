@@ -1,4 +1,4 @@
-import {halfBoxCount,unitLabel,quantityLabel,boxAmount} from './packing.mjs?v=20261104-box-consistency';
+import {halfBoxCount,unitLabel,quantityLabel,boxAmount} from './packing.mjs?v=20261104-factory-manual-box';
 import {recommendation} from './replenishment.mjs?v=20261102-drag';
 let edits={};
 export const hasStockEdits=()=>Object.keys(edits).length>0;
