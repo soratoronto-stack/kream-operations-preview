@@ -72,3 +72,5 @@
 .grouped-product.stock-low .card-body{background:#fff4f0}
 
 .order-quick-actions .recommendation-help{position:relative}.order-quick-actions .recommendation-help[open]>div{position:absolute;right:0;top:100%;width:min(320px,calc(100vw - 40px));max-width:none;z-index:4;box-shadow:0 6px 18px #0002}
+
+.arrange-handle{touch-action:none;cursor:grab}.arrange-handle:active{cursor:grabbing}.arrange-dragging{opacity:.55}.arrange-drop-target{outline:2px dashed var(--green);background:#eef1e5}

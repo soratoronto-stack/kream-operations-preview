@@ -1,4 +1,4 @@
-import {canArrange,sortCatalog,moved} from './order-layout.mjs?v=20261102-drag';
+import {canArrange,sortCatalog,moved} from './order-layout.mjs?v=20261104-drag-only';
 let draft=null;
 export const hasProductOrderEdits=()=>!!draft?.changed;
 export function clearProductOrder(){draft=null;}

@@ -1,5 +1,5 @@
 import {subcategoryStyle,subcategoriesFor} from './category-colors.mjs?v=20261104-pantry-items';
-import {ordered,groupKey,canArrange,moved} from './order-layout.mjs?v=20261102-drag';
+import {ordered,groupKey,canArrange,moved} from './order-layout.mjs?v=20261104-drag-only';
 let draft=null;
 export const hasSubcategoryEdits=()=>!!draft?.changed;
 export function clearSubcategoryState(){draft=null;}
