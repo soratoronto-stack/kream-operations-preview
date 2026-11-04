@@ -16,7 +16,7 @@ import {hasDailyEdits,clearDailyState} from './daily-log.mjs?v=20261102-whole-qu
 import {hasLayoutEdits,clearLayoutState} from './order-layout.mjs?v=20261104-drag-only';
 import {hasChecklistEdits,clearChecklistState} from './checklist.mjs?v=20261104-manual-compact';
 import {hasProductionEdits,clearProductionState} from './production-log.mjs?v=20261104-factory-manual-box';
-import {hasStockEdits,clearStockEdits} from './store-stock.mjs?v=20261104-factory-manual-box';
+import {hasStockEdits,clearStockEdits} from './store-stock.mjs?v=20261104-material-card-order';
 import {hasDispatchEdits,clearDispatchState} from './dispatch.mjs?v=20261104-factory-manual-box';
 import {hasWasteEdits,clearWasteState} from './waste.mjs?v=20261102-whole-quantity';
 export function outstanding(order,receipts,dispatches=[]){const sums=new Map();for(const r of receipts.filter(r=>r.order_id===order.id))for(const p of r.kream_receipt_items||[])sums.set(p.product_id,Math.round(((sums.get(p.product_id)||0)+Number(p.quantity))*1000)/1000);const ds=dispatches.filter(d=>d.order_id===order.id),sent=new Map();for(const d of ds)for(const i of d.kream_dispatch_items||[])sent.set(i.product_id,(sent.get(i.product_id)||0)+Number(i.quantity));return (order.kream_order_items||[]).map(p=>({...p,unshipped:order.dispatch_finalized_at?Math.max(0,Number(p.quantity)-(sent.get(p.product_id)||0)):0,received:sums.get(p.product_id)||0,remaining:Math.max(0,Math.round((Number(p.quantity)-(sums.get(p.product_id)||0))*1000)/1000),receivable:Math.max(0,Math.round(((ds.length?(sent.get(p.product_id)||0):Number(p.quantity))-(sums.get(p.product_id)||0))*1000)/1000)}));}
