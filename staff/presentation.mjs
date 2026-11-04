@@ -5,3 +5,5 @@ export function filterProducts(catalog,{category='',subgroup='',search='',filter
 
 // A short display reference; the full order ID remains the database key.
 export function orderReference(id){return 'KR-'+String(id||'').replaceAll('-','').slice(0,8).toUpperCase();}
+
+export function favoriteIds(orders,rows,store,now=new Date()){const ids=frequentIds(orders,now);for(const r of rows){if(r.store_id!==store)continue;if(r.enabled)ids.add(r.product_id);else ids.delete(r.product_id);}return ids;}
