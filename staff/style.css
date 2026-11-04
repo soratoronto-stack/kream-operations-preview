@@ -92,3 +92,11 @@
 .workplace-status{display:flex;align-items:center;flex-wrap:wrap;gap:6px;font-size:13px;padding:4px 0;line-height:1.4}.workplace-status.is-processed{color:#737669}.workplace-actions{display:flex;gap:5px;margin-left:auto}.workplace-actions button{min-height:32px;padding:4px 12px;font-size:12px}
 #finishedRows{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;align-items:stretch}#finishedRows .card{border-radius:10px}#finishedRows .card-body{padding:10px;gap:6px;height:100%}#finishedRows .line{padding:0;display:grid;gap:4px}#finishedRows strong{min-height:0;overflow-wrap:anywhere}#finishedRows b{font-size:16px;color:var(--green)}#finishedRows small{font-size:11px;line-height:1.35}.finished-stock-controls{display:grid;gap:5px;margin-top:auto}.finished-stock-controls label{font-size:11px;gap:3px}.finished-stock-controls input{min-height:34px;padding:5px 7px}.finished-stock-controls button{font-size:12px;padding:5px 7px;min-height:34px}
 @media(max-width:700px){#finishedRows{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}#finishedRows .card-body{padding:8px}}
+
+
+/* Keep emoji and label in separate full-width rows even in narrow sidebars. */
+#navigation .nav-tiles .nav-tile{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto;align-content:center;justify-items:center;height:auto;min-height:96px;flex-wrap:nowrap;gap:8px}
+#navigation .nav-tile .nav-emoji{grid-column:1;width:auto;justify-self:center}
+#navigation .nav-tile .nav-label{grid-column:1;display:block;min-width:0;width:100%;max-width:100%;text-align:center;white-space:normal;word-break:keep-all;overflow-wrap:anywhere}
+.cost-editor{margin-top:16px}.cost-editor fieldset{min-width:0}.cost-editor input{max-width:100%}
+.account-completed{border-left:4px solid #65824c}.account-pending{border-left:4px solid #ef522e}.account-status{font-weight:650;color:#526542}
