@@ -1,4 +1,4 @@
-import {renderExternalDispatch} from './external-dispatch.mjs?v=20261104-destinations';
+import {renderExternalDispatch} from './external-dispatch.mjs?v=20261104-box-label';
 import {unshippedItem,unshippedTools,bindUnshipped,hasUnshippedEdits,clearUnshippedState} from './unshipped.mjs?v=20261103-reasons-bulk';
 import {orderReference} from './presentation.mjs?v=20261103-clean-confirmation';
 import {workTime} from './work-records.mjs?v=20261102-drag';
