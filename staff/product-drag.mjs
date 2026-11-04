@@ -5,7 +5,7 @@ export function clearProductOrder(){draft=null;}
 function matches(c){return draft?.store===c.store&&draft.category===c.category&&draft.subgroup===c.subgroup;}
 export function mergeProductSubset(all,subset){const selected=new Set(subset);let i=0;return all.map(id=>selected.has(id)?subset[i++]:id);}
 export function productOrderView(list,c){
- const eligible=canArrange(c.profile)&&c.category&&c.subgroup&&!c.search&&c.filter==='all'&&list.length>1;
+ const eligible=canArrange(c.profile)&&c.category&&!c.search&&c.filter==='all'&&list.length>1;
  const editing=!!eligible&&matches(c),rank=new Map((editing?draft.ids:[]).map((id,i)=>[id,i]));
  return {eligible,editing,list:editing?[...list].sort((a,b)=>rank.get(a.id)-rank.get(b.id)):list};
 }
@@ -13,7 +13,7 @@ export function productOrderTools(v,c){
  if(!v.eligible)return '';
  return '<div class="product-order-tools">'+(v.editing?
  '<span>'+c.t('☰를 끌어 품목 순서를 바꾼 뒤 저장하세요.','Drag ☰ to reorder items, then save.')+'</span><button id="saveProductOrder" '+(!draft.changed||c.preview?'disabled':'')+'>'+c.t('품목 순서 저장','Save item order')+'</button><button id="cancelProductOrder">'+c.t('취소','Cancel')+'</button>':
- '<button id="editProductOrder">↔ '+c.t('이 하위분류 품목 순서 변경','Reorder items in this subcategory')+'</button>')+'</div><span id="productOrderAnnouncement" role="status" class="sr-only"></span>';
+ '<button id="editProductOrder">↔ '+c.t('제품 카드 순서 변경','Reorder product cards')+'</button>')+'</div><span id="productOrderAnnouncement" role="status" class="sr-only"></span>';
 }
 export function bindProductOrder(host,c){
  host.querySelector('#editProductOrder')?.addEventListener('click',()=>{
