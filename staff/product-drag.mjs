@@ -39,6 +39,7 @@ export function bindProductOrder(host,c){
    list.ondrop=ev=>{ev.preventDefault();moving=false;card.classList.remove('dragging');saveDOM();};
   };
   handle.ondragend=()=>{if(!moving)return;moving=false;card.classList.remove('dragging');saveDOM();};
+  card.ondragstart=e=>{if(e.target===handle)return;if(e.target?.closest?.('input,button,select,textarea,a,summary')){e.preventDefault();return;}handle.ondragstart(e);};card.ondragend=handle.ondragend;
   handle.onpointerdown=e=>{if(e.pointerType==='mouse'||e.button!==0)return;e.preventDefault();moving=true;previous=[...list.children];card.classList.add('dragging');list.onpointermove=ev=>{if(moving)move(card,document.elementFromPoint(ev.clientX,ev.clientY)?.closest('[data-order-id]'));};list.onpointerup=ev=>finish(ev,false);list.onpointercancel=ev=>finish(ev,true);list.onlostpointercapture=ev=>finish(ev,true);list.setPointerCapture(e.pointerId);};
   function finish(e,cancel){if(!moving)return;moving=false;card.classList.remove('dragging');if(list.hasPointerCapture(e.pointerId))list.releasePointerCapture(e.pointerId);if(cancel)previous.forEach(el=>list.append(el));else saveDOM();}
  });
