@@ -1,12 +1,12 @@
 import {subcategoryStyle} from './category-colors.mjs?v=20261104-drag-only';
 import {renderExternalDispatch} from './external-dispatch.mjs?v=20261104-factory-manual-box';
 import {navigationTile} from './navigation.mjs?v=20261104-factory-manual-box';
-import {renderFinishedStock} from './finished-stock.mjs?v=20261104-factory-manual-box';
+import {renderFinishedStock} from './finished-stock.mjs?v=20261104-compact-live';
 import {halfBoxCount,packingHint,unitLabel,quantityLabel,boxAmount,displayQuantity,inputQuantity} from './packing.mjs?v=20261104-factory-manual-box';
 import {productOrderView,productOrderTools,bindProductOrder} from './product-drag.mjs?v=20261104-material-card-order';
 import {renderClassification} from './classification.mjs?v=20261103-classification-select';
 import {workplaceChoices,renderWorkplaces} from './workplaces.mjs?v=20261103-workplace-pending-fix';
-import {renderAccounts} from './accounts.mjs?v=20261103-combined';
+import {renderAccounts} from './accounts.mjs?v=20261104-compact-live';
 import {quantityStep} from './quantity-step.mjs?v=20261102-whole-quantity';
 import {availableForStore,storeCatalog} from './store-availability.mjs?v=20261104-drag-only';
 import {subcategoryMarkup,bindSubcategoryDrag} from './subcategory-drag.mjs?v=20261104-drag-only';
@@ -204,4 +204,5 @@ async function boot(){
 setInterval(async()=>{if(!db||!user||!profile?.active||isPreview()||page!=='order'||!store||dirty||busy||uncertain||draft?.submitted_order_id||document.hidden||['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName))return;const currentStore=store;try{const r=await db.from('kream_store_baskets').select('id,store_id,delivery_date,items,note,revision,submitted_order_id,updated_at').eq('store_id',store).is('submitted_order_id',null).maybeSingle();if(r.error||dirty||busy||store!==currentStore||isPreview())return;if((r.data?.id||'')!==(draft?.id||'')||r.data?.revision!==draft?.revision){await loadDraft();render();say(t('공유 발주함의 최신 내용을 불러왔어요.','Shared basket updated.'));}}catch{}},15000);
 
 boot();
+
 

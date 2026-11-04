@@ -1,10 +1,10 @@
 import {halfBoxCount,unitLabel,quantityLabel,boxAmount} from './packing.mjs?v=20261104-factory-manual-box';
 import {hasExternalEdits,clearExternalState} from './external-dispatch.mjs?v=20261104-factory-manual-box';
-import {hasFinishedEdits,clearFinishedState} from './finished-stock.mjs?v=20261104-factory-manual-box';
+import {hasFinishedEdits,clearFinishedState} from './finished-stock.mjs?v=20261104-compact-live';
 import {hasProductOrderEdits,clearProductOrder} from './product-drag.mjs?v=20261104-material-card-order';
 import {hasClassificationEdits,clearClassificationState} from './classification.mjs?v=20261103-classification-select';
 import {orderReference} from './presentation.mjs?v=20261103-clean-confirmation';
-import {hasAccountEdits,clearAccountState} from './accounts.mjs?v=20261103-combined';
+import {hasAccountEdits,clearAccountState} from './accounts.mjs?v=20261104-compact-live';
 import {quantityStep} from './quantity-step.mjs?v=20261102-whole-quantity';
 import {hasSubcategoryEdits,clearSubcategoryState} from './subcategory-drag.mjs?v=20261102-drag2';
 import {renderReceiptReviews,hasReviewEdits,clearReviewState} from './receiving-review.mjs?v=20261102-drag';
@@ -61,4 +61,5 @@ export function renderGuides(host,c,kind){
  }
  renderEditor();
 }
+
 
