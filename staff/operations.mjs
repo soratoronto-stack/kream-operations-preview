@@ -1,4 +1,4 @@
-import {receivingLayout} from './receiving-layout.mjs?v=20261105-receiving-simple';
+import {receivingLayout} from './receiving-layout.mjs?v=20261105-stock-zero';
 import {halfBoxCount,unitLabel,quantityLabel,boxAmount} from './packing.mjs?v=20261104-factory-manual-box';
 import {hasExternalEdits,clearExternalState} from './external-dispatch.mjs?v=20261104-factory-manual-box';
 import {hasFinishedEdits,clearFinishedState} from './finished-stock.mjs?v=20261104-compact-live';
