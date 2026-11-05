@@ -54,3 +54,6 @@ test('confirming 3 ordered and 2 sent reloads a closed order with one unshipped 
  const html=node('#dispatchBody').innerHTML;assert.doesNotMatch(html,/data-send="test-order"/);assert.match(html,/미출고 기록/);assert.match(html,/테스트 케이크<\/strong><b>1 EA<\/b>/);assert.match(html,/출고 확정 이력/);assert.match(html,/미출고 사유 저장/);assert.match(html,/사유 미작성 · 출고 확정은 완료됐습니다/);
  }finally{globalThis.confirm=originalConfirm;clearDispatchState();}
 });
+
+import fs from 'node:fs';
+test('ordered-quantity action is below the items and immediately before final confirmation',()=>{const s=fs.readFileSync(new URL('../dispatch.mjs',import.meta.url),'utf8');const bulk=s.indexOf('data-send-all=');assert.ok(bulk>s.indexOf('</tbody></table>'));assert.ok(bulk<s.indexOf('data-send="${o.id}"'));assert.match(s,/발주량대로 출고확인/);assert.doesNotMatch(s,/미선택 품목을 발주량대로 출고 선택/);});
