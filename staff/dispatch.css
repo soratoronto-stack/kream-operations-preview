@@ -57,3 +57,10 @@
 .receiving-reviews>section>.panel{border:0;padding:12px 0 0;margin-bottom:0}
 .receiving-reviews>section>.panel>h2{display:none}
 @media(max-width:600px){.receiving-store .table-scroll table{min-width:500px}.receiving-store .receiving-actions button{font-size:12px;padding:8px 6px}.receiving-record .line{flex-wrap:wrap}.receiving-missing>summary,.receiving-history>summary,.receiving-reviews>summary{font-size:15px}}
+
+.receiving-store .receiving-item{display:flex;align-items:baseline;flex-wrap:wrap;gap:3px 7px}
+.receiving-store .table-scroll td:first-child .receiving-item small{display:inline;margin:0;white-space:nowrap}
+.receiving-store .receiving-quantity{display:flex;align-items:center;gap:7px;white-space:nowrap}
+.receiving-store .receiving-quantity>small{display:inline;margin:0;font-size:12px;color:#737669}
+.receiving-store .dispatch-row-actions button[data-receive-choice="none"][aria-pressed="true"]{background:#9a4035;border-color:#9a4035}
+@media(max-width:600px){.receiving-store .table-scroll table{min-width:610px}}
