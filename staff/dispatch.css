@@ -25,3 +25,15 @@
 .dispatch-store label:has([data-send-note]){font-size:12px;margin-top:8px;gap:4px}
 .dispatch-store [data-send-note]{min-height:45px;padding:7px}
 @media(max-width:600px){.dispatch-store>summary{padding:12px}.dispatch-store>summary strong{font-size:15px}.dispatch-store-detail{padding:0 6px 8px}.dispatch-store .table-scroll table{min-width:540px}.dispatch-store .actions{display:grid;grid-template-columns:1fr 1fr}}
+
+
+.dispatch-page-title{font-size:clamp(12px,2.4vw,22px);white-space:nowrap;line-height:1.5;margin:0 0 10px}
+.dispatch-store[data-dispatch-store]{border-color:var(--store-edge,#deded2)}
+.dispatch-store[data-dispatch-store]>summary{background:var(--store-bg,#f4f3eb);border-left:5px solid var(--store-edge,#deded2);color:var(--store-ink,#32342d)}
+.dispatch-store[data-dispatch-store]>summary:before{color:var(--store-ink,#59694c)}
+.dispatch-store[data-dispatch-store="finch"]{--store-bg:#e8f0df;--store-edge:#8ca76a;--store-ink:#40552c}
+.dispatch-store[data-dispatch-store="downtown"]{--store-bg:#e4eff8;--store-edge:#7ca5c7;--store-ink:#315979}
+.dispatch-store[data-dispatch-store="richmond-hill"]{--store-bg:#f0e8f6;--store-edge:#af92c3;--store-ink:#6d4e85}
+.dispatch-store[data-dispatch-store="midland"]{--store-bg:#fbe9de;--store-edge:#d99a78;--store-ink:#845133}
+.dispatch-store[data-dispatch-store="galleria-ktown"]{--store-bg:#fae6eb;--store-edge:#cd91a2;--store-ink:#86495b}
+.dispatch-store[data-dispatch-store="galleria-yorkmills"]{--store-bg:#e0f1ee;--store-edge:#79afa6;--store-ink:#356c64}

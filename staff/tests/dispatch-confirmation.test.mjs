@@ -19,7 +19,7 @@ test('unchecked items are never silently treated as shipped',()=>{
 test('confirmation shows local missing-item errors before starting the busy action',async()=>{
  clearDispatchState();
  const nodes=new Map();
- const node=k=>{if(!nodes.has(k))nodes.set(k,{value:k==='[name="store"]'?'finch':'',dataset:{},textContent:'',innerHTML:'',hidden:false,focus(){this.focused=true;},scrollIntoView(){this.scrolled=true;},setAttribute(){},querySelector:node,querySelectorAll:()=>[]});return nodes.get(k);};
+ const node=k=>{if(!nodes.has(k))nodes.set(k,{value:k==='[name="store"]'?'finch':'',dataset:{},textContent:'',innerHTML:'',hidden:false,focus(){this.focused=true;},scrollIntoView(){this.scrolled=true;},setAttribute(){},replaceWith(){},querySelector:node,querySelectorAll:()=>[]});return nodes.get(k);};
  const order={id:'o',store_id:'finch',source_kind:'store',kream_order_items:[{product_id:'cake',name_ko:'테스트 케이크',name_en:'Chewy',order_unit:'EA',quantity:3},{product_id:'cookie',name_ko:'쿠키',name_en:'Cookie',order_unit:'Bag',quantity:1}]};
  const inputs=order.kream_order_items.map(i=>({...node(i.product_id),dataset:{sendOrder:'o',sendProduct:i.product_id}}));
  const send={dataset:{send:'o'}},note={dataset:{sendNote:'o'}};
@@ -41,7 +41,7 @@ test('dispatch is acknowledged only after actual quantities and closed order are
 
 test('confirming 3 ordered and 2 sent reloads a closed order with one unshipped unit and no pending confirm button',async()=>{
  clearDispatchState();
- const nodes=new Map();const node=k=>{if(!nodes.has(k))nodes.set(k,{value:k==='[name="store"]'?'finch':'',dataset:{},innerHTML:'',textContent:'',focus(){},scrollIntoView(){},setAttribute(){},querySelector:node,querySelectorAll:()=>[]});return nodes.get(k);};
+ const nodes=new Map();const node=k=>{if(!nodes.has(k))nodes.set(k,{value:k==='[name="store"]'?'finch':'',dataset:{},innerHTML:'',textContent:'',focus(){},scrollIntoView(){},setAttribute(){},replaceWith(){},querySelector:node,querySelectorAll:()=>[]});return nodes.get(k);};
  const order={id:'test-order',store_id:'finch',status:'submitted',source_kind:'store',kream_dispatches:[],kream_order_items:[{product_id:'cake',name_ko:'테스트 케이크',name_en:'Chewy',order_unit:'EA',quantity:3}]};
  const input={value:'',dataset:{sendOrder:order.id,sendProduct:'cake'}},note={dataset:{sendNote:order.id}},send={dataset:{send:order.id}};
  const host={innerHTML:'',querySelector:node,querySelectorAll:s=>s==='[data-send-product]'?[input]:s==='[data-send-note]'?[note]:s==='[data-send]'?[send]:[]};
