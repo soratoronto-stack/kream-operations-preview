@@ -25,7 +25,7 @@ import {renderDispatch} from './dispatch.mjs?v=20261105-dispatch-layout';
 import {renderProduction} from './production.mjs?v=20261104-factory-manual-box';
 import {renderWaste,todayToronto} from './waste.mjs?v=20261102-whole-quantity';
 import {navigationGroups,orderedPages,previewRoles,visiblePages,canPreview,isFactoryRole,scopePreview} from './access.mjs?v=20261104-factory-manual-box';
-import {renderReceiving,renderGuides,hasModuleEdits,clearModuleState} from './operations.mjs?v=20261105-receiving-actions';
+import {renderReceiving,renderGuides,hasModuleEdits,clearModuleState} from './operations.mjs?v=20261105-receiving-wording';
 import {artwork,deliveryLabel,filterProducts,frequentIds,favoriteIds,orderReference} from './presentation.mjs?v=20261103-favorite-stars';
 import {tomorrowToronto,validItems,sameBasketItems,saveSharedBasket as saveDraft,submitSharedBasket as submitDraft,aggregate} from './core.mjs?v=20261103-submit-fix';
 const $=s=>document.querySelector(s), esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
