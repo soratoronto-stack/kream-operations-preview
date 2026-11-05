@@ -1,0 +1,27 @@
+.dispatch-store{padding:0;margin:10px 0;overflow:hidden}
+.dispatch-store>summary{display:flex;align-items:center;gap:12px;padding:14px 16px;list-style:none;background:#f4f3eb}
+.dispatch-store>summary::-webkit-details-marker{display:none}
+.dispatch-store>summary:before{content:'▸';font-size:17px;color:#59694c}
+.dispatch-store[open]>summary:before{content:'▾'}
+.dispatch-store>summary strong{font-size:17px;line-height:1.35}
+.dispatch-store>summary>span{margin-left:auto;color:#737669;font-size:12px;white-space:nowrap}
+.dispatch-store-detail{padding:0 12px 12px}
+.dispatch-order{padding:10px 0}
+.dispatch-order+.dispatch-order{border-top:2px solid #deded2;margin-top:12px}
+.dispatch-order-reference{display:block;color:#737669;margin:2px 0 8px;font-size:12px}
+.dispatch-store .table-scroll td,.dispatch-store .table-scroll th{padding:6px 8px;font-size:14px;vertical-align:middle;line-height:1.35}
+.dispatch-store .table-scroll th{font-size:12px;color:#737669;font-weight:600}
+.dispatch-store .table-scroll td:first-child small{display:inline-block;margin-left:6px;font-size:11px;color:#838777}
+.dispatch-store .table-scroll td:nth-child(2)>strong{font-size:14px;white-space:nowrap}
+.dispatch-store .table-scroll td:nth-child(2)>small,.dispatch-store .table-scroll td:last-child>small{display:block;font-size:11px;color:#737669;margin-top:2px}
+.dispatch-store .dispatch-row-actions{gap:4px;flex-wrap:nowrap}
+.dispatch-store .dispatch-row-actions button{min-height:32px;padding:4px 8px;font-size:12px;border-radius:7px;line-height:1.35}
+.dispatch-store .dispatch-row-actions+small{margin-top:2px;font-size:11px;color:#737669;line-height:1.2}
+.dispatch-store .table-scroll input{width:82px;max-width:82px;min-height:32px;padding:5px 7px;font-size:14px;border-radius:7px}
+.dispatch-store .dispatch-review{font-size:12px;line-height:1.4;margin:8px 0}
+.dispatch-store .dispatch-review:empty,.dispatch-store [data-send-error]:empty{display:none}
+.dispatch-store .actions{margin:10px 0 0}
+.dispatch-store .actions button{font-size:14px;padding:8px 12px;min-height:38px}
+.dispatch-store label:has([data-send-note]){font-size:12px;margin-top:8px;gap:4px}
+.dispatch-store [data-send-note]{min-height:45px;padding:7px}
+@media(max-width:600px){.dispatch-store>summary{padding:12px}.dispatch-store>summary strong{font-size:15px}.dispatch-store-detail{padding:0 6px 8px}.dispatch-store .table-scroll table{min-width:540px}.dispatch-store .actions{display:grid;grid-template-columns:1fr 1fr}}
