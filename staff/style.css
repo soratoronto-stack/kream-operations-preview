@@ -112,3 +112,11 @@
 #materialCards .material-stock input{font-size:21px;font-weight:800;color:#32342d;font-variant-numeric:tabular-nums;min-height:38px}
 .finished-stock-card .stock-current{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px}
 .finished-stock-card .stock-current b{font-size:23px}
+
+/* External dispatch shares store-order card styling. */
+#externalForm .external-product-grid{margin:12px 0 20px}
+#externalSubgroups button{background:var(--group-bg,transparent);border-color:var(--group-edge,var(--line));color:var(--ink)}
+#externalSubgroups button.active{box-shadow:inset 0 0 0 2px var(--group-edge,var(--green));font-weight:700}
+.external-basket-row{align-items:center;gap:10px;flex-wrap:wrap;padding:10px 0}
+.external-basket-row>span{flex:1;min-width:130px}.external-basket-row small{display:block}
+.external-basket-row .stepper{width:140px;flex-shrink:0}

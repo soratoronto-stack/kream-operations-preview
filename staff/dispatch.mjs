@@ -1,6 +1,6 @@
 import {confirmDispatchSummary} from './dispatch-confirmation.mjs?v=20261105-dispatch-submit';
 import {halfBoxCount,unitLabel,quantityLabel,boxAmount,displayQuantity,inputQuantity} from './packing.mjs?v=20261104-factory-manual-box';
-import {renderExternalDispatch} from './external-dispatch.mjs?v=20261105-dispatch-fold';
+import {renderExternalDispatch} from './external-dispatch.mjs?v=20261105-external-cards';
 import {unshippedItem,unshippedTools,bindUnshipped,hasUnshippedEdits,clearUnshippedState} from './unshipped.mjs?v=20261104-unshipped-compact';
 import {orderReference} from './presentation.mjs?v=20261103-clean-confirmation';
 import {workTime} from './work-records.mjs?v=20261102-drag';

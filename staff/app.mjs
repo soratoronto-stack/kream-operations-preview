@@ -1,6 +1,6 @@
 import {validDeliveryDate,confirmDeliveryDate,fullDeliveryDate} from './delivery-date.mjs?v=20261105-delivery-date';
 import {subcategoryStyle} from './category-colors.mjs?v=20261104-drag-only';
-import {renderExternalDispatch} from './external-dispatch.mjs?v=20261105-dispatch-fold';
+import {renderExternalDispatch} from './external-dispatch.mjs?v=20261105-external-cards';
 import {navigationTile} from './navigation.mjs?v=20261104-factory-manual-box';
 import {renderFinishedStock} from './finished-stock.mjs?v=20261105-stock-visible';
 import {halfBoxCount,packingHint,unitLabel,quantityLabel,boxAmount,displayQuantity,inputQuantity} from './packing.mjs?v=20261104-factory-manual-box';
@@ -21,7 +21,7 @@ import {renderChecklist} from './checklist.mjs?v=20261104-manual-compact';
 import {sortCatalog,ordered,groupKey} from './order-layout.mjs?v=20261104-drag-only';
 import {renderOverview} from './overview.mjs?v=20261102-drag';
 import {stockFields,bindStock} from './store-stock.mjs?v=20261105-stock-visible';
-import {renderDispatch} from './dispatch.mjs?v=20261105-dispatch-layout';
+import {renderDispatch} from './dispatch.mjs?v=20261105-external-cards';
 import {renderProduction} from './production.mjs?v=20261104-factory-manual-box';
 import {renderWaste,todayToronto} from './waste.mjs?v=20261102-whole-quantity';
 import {navigationGroups,orderedPages,previewRoles,visiblePages,canPreview,isFactoryRole,scopePreview} from './access.mjs?v=20261104-factory-manual-box';
@@ -117,7 +117,7 @@ function renderPortal(){
  bindPreview();document.querySelectorAll('[data-area]').forEach(b=>b.onclick=()=>{if(hasModuleEdits()&&!confirm(t('작성 중인 내용을 두고 전환할까요?','Leave unsaved entries?')))return;clearModuleState();combinedArea=b.dataset.area;render();});const view=$('#view');
  if(['orderSaved','orderComplete'].includes(page)){renderOrderConfirmation(view);return;}
  if(!['factorymanual','order','history','production','receiving','sop','manual','waste','dispatch','overview','productionlog','finishedstock','externaldispatch','daily','inventory','purchases','materialreceiving','settlement','accounts','workplaces','catalogreview'].includes(page)){view.innerHTML=`<div class="panel pending"><h2>${t('실제 자료 연결 준비 중','Shared data connection pending')}</h2><p>${t('기존 초안에서 구성한 메뉴입니다. 이 기능은 아직 로그인 계정의 공유 자료와 연결되지 않았습니다. 지금은 매장 발주·초안 저장·발주 내역·생산 합계를 사용할 수 있어요.','This module is part of the original design. It is not connected to shared account data yet. Store ordering, cloud drafts, order history and production totals are available.')}</p><a href="../" target="_blank" rel="noopener">${t('기존 디자인 미리보기 열기 ↗','Open original design preview ↗')}</a></div>`;return;}
- const moduleContext={reorderMissing,orders,receipts,guides,waste,dispatches,profile:vp,stores:shownStores,store,lang,t,esc,name,preview:isPreview(),act:run,db,say,reload:async()=>{await loadOrders();await loadModules();}};
+ const moduleContext={photoURLs,reorderMissing,orders,receipts,guides,waste,dispatches,profile:vp,stores:shownStores,store,lang,t,esc,name,preview:isPreview(),act:run,db,say,reload:async()=>{await loadOrders();await loadModules();}};
  if(page==='catalogreview'){renderClassification(view,{...moduleContext,role:screenRole(),catalogAll,reloadCatalog:loadCatalog});return;}
  if(page==='workplaces'){renderWorkplaces(view,moduleContext);return;}
  if(page==='accounts'){renderAccounts(view,moduleContext);return;}
