@@ -100,3 +100,15 @@
 #navigation .nav-tile .nav-label{grid-column:1;display:block;min-width:0;width:100%;max-width:100%;text-align:center;white-space:normal;word-break:keep-all;overflow-wrap:anywhere}
 .cost-editor{margin-top:16px}.cost-editor fieldset{min-width:0}.cost-editor input{max-width:100%}
 .account-completed{border-left:4px solid #65824c}.account-pending{border-left:4px solid #ef522e}.account-status{font-weight:650;color:#526542}
+
+/* Keep current stock legible without expanding the stock editor. */
+.stock-editor summary{font-size:13px;line-height:1.4;padding:8px 0;color:#32342d}
+.stock-current{font-size:13px;font-weight:600;color:#32342d}
+.stock-current b{font-size:21px;font-weight:800;line-height:1.2;font-variant-numeric:tabular-nums;margin-left:5px}
+.stock-editor summary .stock-current{display:inline-flex;align-items:baseline;flex-wrap:wrap;gap:2px}
+.stock-editor summary .stock-minimum{display:block;font-size:12px;color:#646957;margin:5px 0 0 12px}
+.stock-minimum b{font-weight:650;font-variant-numeric:tabular-nums}
+#materialCards .material-stock label{font-size:13px;font-weight:650;color:#32342d}
+#materialCards .material-stock input{font-size:21px;font-weight:800;color:#32342d;font-variant-numeric:tabular-nums;min-height:38px}
+.finished-stock-card .stock-current{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px}
+.finished-stock-card .stock-current b{font-size:23px}
