@@ -37,3 +37,23 @@
 .dispatch-store[data-dispatch-store="midland"]{--store-bg:#fbe9de;--store-edge:#d99a78;--store-ink:#845133}
 .dispatch-store[data-dispatch-store="galleria-ktown"]{--store-bg:#fae6eb;--store-edge:#cd91a2;--store-ink:#86495b}
 .dispatch-store[data-dispatch-store="galleria-yorkmills"]{--store-bg:#e0f1ee;--store-edge:#79afa6;--store-ink:#356c64}
+
+
+.receiving-help{font-size:13px;margin:8px 0 16px;color:#737669}
+.receiving-help p{line-height:1.6}
+.receiving-store .receiving-order-select{font-size:12px;gap:4px;margin:12px 0 0}
+.receiving-store .receiving-order-select select{min-height:36px;padding:6px 8px;font-size:14px}
+.receiving-store .receiving-check{display:flex;align-items:center;gap:7px;font-size:13px;white-space:nowrap;margin:0}
+.receiving-store .receiving-check input[type=checkbox]{width:20px;max-width:20px;height:20px;min-height:20px;padding:0;margin:0;accent-color:#59694c}
+.receiving-store .table-scroll td:first-child small{display:block;margin:2px 0 0}
+.receiving-store .receiving-note{font-size:12px;gap:4px;margin-top:10px}
+.receiving-store #receiptNote{min-height:45px;padding:7px}
+.receiving-missing>summary,.receiving-history>summary,.receiving-reviews>summary{display:flex;align-items:center;gap:12px;cursor:pointer;font-size:17px}
+.receiving-missing>summary>span,.receiving-history>summary>span{margin-left:auto;font-size:12px;color:#737669}
+.receiving-record{padding:10px 0;border-bottom:1px solid #e6e4db;font-size:14px}
+.receiving-record .line{font-size:13px;padding:6px 0;gap:12px}
+.receiving-record>summary,.receiving-result summary{cursor:pointer;font-size:14px}
+.receiving-result h2{font-size:19px;margin:0 0 8px}
+.receiving-reviews>section>.panel{border:0;padding:12px 0 0;margin-bottom:0}
+.receiving-reviews>section>.panel>h2{display:none}
+@media(max-width:600px){.receiving-store .table-scroll table{min-width:500px}.receiving-store .receiving-actions button{font-size:12px;padding:8px 6px}.receiving-record .line{flex-wrap:wrap}.receiving-missing>summary,.receiving-history>summary,.receiving-reviews>summary{font-size:15px}}
