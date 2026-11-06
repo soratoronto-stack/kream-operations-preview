@@ -15,3 +15,12 @@ export function mergeCloverReports(reports,daily){
  }
  return rows;
 }
+
+export async function readCloverPeriod(db,start,end){
+ const rows=[];
+ for(let offset=0;;offset+=500){
+  const r=await db.from('kream_clover_daily').select('store_id,business_date,captured_at,result').gte('business_date',start).lte('business_date',end).order('business_date').order('store_id').range(offset,offset+499);
+  if(r.error)throw r.error;
+  rows.push(...r.data);if(r.data.length<500)return rows;
+ }
+}

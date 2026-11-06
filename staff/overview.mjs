@@ -1,4 +1,4 @@
-import {mergeCloverReports} from './clover-sales.mjs?v=20261106-server-sales';
+import {mergeCloverReports,readCloverPeriod} from './clover-sales.mjs?v=20261106-server-sales2';
 import {renderGalleriaDispatchOverview} from './galleria-workspace.mjs?v=20261105-galleria';
 import {readPeriod,renderExternalSales} from './external-sales.mjs?v=20261104-all-sales';
 import {channels,labels,summary,money} from './sales-core.mjs?v=20261104-all-sales';
@@ -18,7 +18,7 @@ export async function renderOverview(host,c){
  try{[rows,extras,invoices]=await Promise.all([readPeriod(db,'kream_sales_reports',range.start,range.end),readPeriod(db,'kream_external_sales',range.start,range.end),readPeriod(db,'kream_galleria_invoices',range.start,range.end,'period_end')]);if(token!==generation||!host.querySelector('#salesData'))return;}
  catch{if(token===generation&&host.querySelector('#salesData'))host.querySelector('#salesData').innerHTML=`<p class="error">${t('매출 자료를 불러오지 못했어요. 다시 불러와 주세요.','Could not load sales. Please reload.')}</p>`;return;}
  let cloverReadFailed=false;
- try{const daily=await readPeriod(db,'kream_clover_daily',range.start,range.end);if(token!==generation||!host.querySelector('#salesData'))return;rows=mergeCloverReports(rows,daily);}catch{cloverReadFailed=true;}
+ try{const daily=await readCloverPeriod(db,range.start,range.end);if(token!==generation||!host.querySelector('#salesData'))return;rows=mergeCloverReports(rows,daily);}catch{cloverReadFailed=true;}
  if(!rows.length){const latest=await db.from('kream_sales_reports').select('business_date').order('business_date',{ascending:false}).limit(1);latestDate=latest.data?.[0]?.business_date||'';if(token!==generation)return;}
  const outside=selected==='all'?extras.filter(r=>!r.voided):[],galleria=selected==='all'?invoices:[],externalTotal=outside.reduce((n,r)=>n+Number(r.sales_cents),0),galleriaTotal=galleria.reduce((n,r)=>n+Number(r.net_sales_cents),0);
  const visibleStores=stores.filter(s=>selected==='all'||s.id===selected),ids=visibleStores.map(s=>s.id),data=summary(rows,ids),current=data.current;
