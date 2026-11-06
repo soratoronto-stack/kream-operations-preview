@@ -10,7 +10,7 @@ import {renderClassification} from './classification.mjs?v=20261103-classificati
 import {workplaceChoices,renderWorkplaces} from './workplaces.mjs?v=20261103-workplace-pending-fix';
 import {renderAccounts} from './accounts.mjs?v=20261104-processed';
 import {quantityStep} from './quantity-step.mjs?v=20261102-whole-quantity';
-import {availableForStore,storeCatalog} from './store-availability.mjs?v=20261104-drag-only';
+import {availableForStore,storeCatalog} from './store-availability.mjs?v=20261106-pantry-set';
 import {subcategoryMarkup,bindSubcategoryDrag} from './subcategory-drag.mjs?v=20261104-drag-only';
 import {renderSettlement,readPrices,productPriceMarkup} from './settlement.mjs?v=20261102-drag';
 import {renderMaterials} from './materials.mjs?v=20261106-below-minimum';
@@ -224,6 +224,7 @@ setInterval(async()=>{
  }catch{}
 },60000);
 boot();
+
 
 
 

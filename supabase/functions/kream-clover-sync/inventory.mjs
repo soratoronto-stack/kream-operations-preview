@@ -35,7 +35,7 @@ export async function collectInventory({connection,state,catalog=[],db,now=Date.
  if(!state.inventory_last_success_at){
   const items=await collection(get,'items');
   // Ignore duplicates so a server refresh can never overwrite owner mappings.
-  for(let i=0;i<items.length;i+=100)await db('kream_clover_items?on_conflict=store_id,clover_item_id',items.slice(i,i+100).filter(x=>!x.deleted).map(x=>({store_id:connection.store_id,clover_item_id:x.id,name:String(x.name||x.id),product_id:null,stock_per_sale:1,enabled:false,...safeMapping(x.name,catalog)})),'POST','resolution=ignore-duplicates,return=minimal');
+  for(let i=0;i<items.length;i+=100)await db('kream_clover_items?on_conflict=store_id,clover_item_id',items.slice(i,i+100).filter(x=>!x.deleted).map(x=>({store_id:connection.store_id,clover_item_id:x.id,name:String(x.name||x.id),product_id:null,stock_per_sale:1,enabled:false,...safeMapping(x.name,catalog,connection.store_id)})),'POST','resolution=ignore-duplicates,return=minimal');
  }
  const start=state.inventory_cursor?Math.max(Date.parse(state.inventory_started_at),Date.parse(state.inventory_cursor)-600000):now-2*3600000;
  const payments=await collection(get,'payments',{expand:'order',filter:[`createdTime>=${start}`,`createdTime<${now}`]});
@@ -49,9 +49,10 @@ export async function collectInventory({connection,state,catalog=[],db,now=Date.
   const allPayments=[...new Map([...payments,...(order.payments?.elements||[]).map(p=>({...p,order:{id}}))].map(p=>[p.id,p])).values()];
   const sales=saleLines(order,lines,allPayments);
   if(sales.length){
-   await db('kream_clover_items?on_conflict=store_id,clover_item_id',sales.map(s=>({store_id:connection.store_id,clover_item_id:s.item_id,name:s.name,product_id:null,stock_per_sale:1,enabled:false,...safeMapping(s.name,catalog)})),'POST','resolution=ignore-duplicates,return=minimal');
+   await db('kream_clover_items?on_conflict=store_id,clover_item_id',sales.map(s=>({store_id:connection.store_id,clover_item_id:s.item_id,name:s.name,product_id:null,stock_per_sale:1,enabled:false,...safeMapping(s.name,catalog,connection.store_id)})),'POST','resolution=ignore-duplicates,return=minimal');
    await db('rpc/kream_apply_clover_sales',{target_store:connection.store_id,sales});observed+=sales.length;}
  }
  await db(`kream_clover_connections?store_id=eq.${encodeURIComponent(connection.store_id)}`,{inventory_cursor:new Date(now).toISOString(),inventory_last_success_at:new Date(now).toISOString(),inventory_last_error:null},'PATCH');
  return {observed,payments:payments.length,orders:ids.length,lineCount,states};
 }
+

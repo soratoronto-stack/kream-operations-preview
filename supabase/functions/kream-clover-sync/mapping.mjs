@@ -1,7 +1,16 @@
 // Only unambiguous finished items. A flavourless menu, mixed set or unknown
 // pack size must be reviewed by the owner instead of guessed.
-export function safeMapping(name,catalog){
+export function safeMapping(name,catalog,storeId=''){
  const n=String(name).toLowerCase().replace(/\s+/g,' ').trim();
+ // Owner confirmed these are counted manually, rather than by POS sales.
+ if(/(?:kream|cream)\s*bomb|크림밤/.test(n))return {};
+ if(storeId==='finch'&&(/^(mini croissant)( · .*)?$/.test(n)||/^financiers · 2ea( \/ 2ea)*$/.test(n)||n==='garlic bagel'))return {};
+ if(storeId==='midland'&&n==='croissant cookie · sweet')return {};
+ if(storeId==='richmond-hill'&&['bagel · basil tomato','bagel · blueberry','bagel · strawberry','scones · plain','short cake'].includes(n))return {};
+ if(storeId==='downtown'&&['financier · choco','mini scone'].includes(n))return {};
+ const confirmed={finch:{'cookie · cookie set':'pantry-cookie-set','crumble rice cake · injeolmi':'sheet-84dd8c64a5'},'richmond-hill':{'chestnut crumble · mugwort':'sheet-48cab960c4'}};
+ const confirmedId=confirmed[storeId]?.[n];
+ if(confirmedId){const p=catalog.find(p=>p.id===confirmedId&&p.active&&!p.archived&&/^(EA|개|Set)$/.test(p.order_unit));return p?{product_id:p.id,stock_per_sale:1,enabled:true}:{};}
  const aliases={
   'sausage bread':'sausage-bread','susage bread':'sausage-bread','suasage bread':'sausage-bread',
   'protein banana pudding':'sheet-9e339b09aa',
