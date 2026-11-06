@@ -49,7 +49,7 @@ Deno.serve(async(req:Request)=>{
     }
    }
   }));
-  return Response.json({results},{status:results.some(r=>r.status==='failed')?207:200});
+  return Response.json({results},{status:results.some(r=>r.status==='failed'||r.inventory==='failed')?207:200});
  }catch{return Response.json({error:'Collector unavailable; previous observations retained'},{status:500});}
 });
 
