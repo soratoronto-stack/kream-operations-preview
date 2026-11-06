@@ -25,11 +25,11 @@ test('exact flavour mapping never guesses mixed sets or unidentified packs',()=>
  assert.equal(safeMapping('Tiramisu · Mango',cat).product_id,'sheet-c42f92202d');
  for(const name of ['Classic Tiramisu · Classic / Mango','Dubai Chewy · Dubai 3pc','Cookie Set','Tiramisu','Milk'])assert.deepEqual(safeMapping(name,cat),{});
 });
-test('minimum threshold includes equality and zero, excludes unknown or invalid stock',()=>{
- assert.equal(needsOrder({on_hand:6,minimum:6}),true);assert.equal(needsOrder({on_hand:0,minimum:0}),true);
- assert.equal(needsOrder({on_hand:7,minimum:6}),false);
+test('minimum threshold excludes equality, includes strictly lower stock only',()=>{
+ assert.equal(needsOrder({on_hand:6,minimum:6}),false);assert.equal(needsOrder({on_hand:0,minimum:0}),false);
+ assert.equal(needsOrder({on_hand:7,minimum:6}),false);assert.equal(needsOrder({on_hand:0,minimum:1}),true);
  for(const s of [{on_hand:null,minimum:6},{on_hand:0,minimum:null},{on_hand:'',minimum:0},{on_hand:'invalid',minimum:3},undefined])assert.equal(needsOrder(s),false);
- assert.equal(filterProducts([{id:'a',category:'A',name_ko:'a',name_en:'a'}],{filter:'need',category:'B',stock:[{product_id:'a',on_hand:6,minimum:6}]}).length,1);
+ assert.equal(filterProducts([{id:'a',category:'A',name_ko:'a',name_en:'a'}],{filter:'need',category:'B',stock:[{product_id:'a',on_hand:5,minimum:6}]}).length,1);
 });
 test('collector sends uniform mapped/unmapped rows, uses only GET against Clover and keeps its key server-side',async()=>{
  const {collectInventory}=await import('../../supabase/functions/kream-clover-sync/inventory.mjs');
