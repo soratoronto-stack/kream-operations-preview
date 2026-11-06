@@ -154,3 +154,16 @@
  #products .stock-editor:not([open]){padding-bottom:0}
 }
 @media(max-width:480px){#products.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+/* Approved warm cream / brown / orange palette; layout unchanged. */
+:root{color:#352e29;background:#f8f5ef;--orange:#ff4927;--line:#e8ddd2;--green:#8b7462}
+body,.signed-in aside,.signed-in header{background:#f8f5ef;color:#352e29}
+.muted,.tagline,.account,.section-title small{color:#918174}
+#navigation .nav-tiles .nav-tile{background:#fffdfa;color:#352e29;border:1px solid #e8ddd2}
+#navigation .nav-tiles .nav-tile.active,nav button.active{background:#fbe8de;color:#b84326;border-color:#ffa78e}
+.nav-group h2,#navigation .nav-tiles .nav-group h2{color:#8b7462}
+.controls,.empty{background:#f3ece3}
+.chips button.active,.categories button.active{background:#fbe8de;color:#b84326;border-color:#f6ab92}
+.primary{background:var(--orange);border-color:var(--orange);color:#fff}
+#cart{background:#53443a;color:#fff}.cart-detail{color:#352e29;background:#fffaf3}
+.stepper button,.stock-current,.stock-minimum{color:#6f5949}
