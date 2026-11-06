@@ -3,6 +3,7 @@
 export function safeMapping(name,catalog,storeId=''){
  const n=String(name).toLowerCase().replace(/\s+/g,' ').trim();
  // Owner confirmed these are counted manually, rather than by POS sales.
+ if(/dubai\s*chewy|chewy\s*ball|두바이쫀득/.test(n))return {};
  if(/(?:kream|cream)\s*bomb|크림밤/.test(n))return {};
  if(storeId==='finch'&&(/^(mini croissant)( · .*)?$/.test(n)||/^financiers · 2ea( \/ 2ea)*$/.test(n)||n==='garlic bagel'))return {};
  if(storeId==='midland'&&n==='croissant cookie · sweet')return {};
@@ -27,7 +28,7 @@ export function safeMapping(name,catalog,storeId=''){
  const trays={'fig cheesecake':'sheet-39cdeb9512','fig cheese cake':'sheet-39cdeb9512','yuzu cheesecake':'sheet-04562b9807','yuza cheesecake':'sheet-04562b9807','yuzu cheese cake':'sheet-04562b9807','chestnut cheesecake':'sheet-9fbb33a000','chestnut cheese cake':'sheet-9fbb33a000','chestnust cheese cake':'sheet-9fbb33a000','chesnut cheesecake':'sheet-9fbb33a000','tiramisu cheesecake':'sheet-08ea6b9890','tiramisu cheese cake':'sheet-08ea6b9890'};
  const tray=catalog.find(p=>p.id===trays[n]&&p.active&&!p.archived&&p.order_unit==='Tray');
  if(tray)return {product_id:tray.id,stock_per_sale:0.1,enabled:true};
- const candidates=catalog.filter(p=>p.active&&!p.archived&&p.category==='디저트'&&/^(EA|개)$/.test(p.order_unit));
+ const candidates=catalog.filter(p=>p.active&&!p.archived&&!['chewy','sheet-70441a15e7','sheet-9ea75322e4','sheet-1f39626328'].includes(p.id)&&p.category==='디저트'&&/^(EA|개)$/.test(p.order_unit));
  const exact=candidates.filter(p=>[p.name_ko,p.name_en].some(s=>normal(s)===normal(name)));
  const product=candidates.find(p=>p.id===aliases[n])||(exact.length===1?exact[0]:null);
  return product?{product_id:product.id,stock_per_sale:1,enabled:true}:{};
