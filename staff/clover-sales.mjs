@@ -10,7 +10,7 @@ export function mergeCloverReports(reports,daily){
    status:'provisional',sales_scope:old?.report.sales_scope==='includes_delivery'?'includes_delivery':'exclusive',metric_basis:'net_before_tax_after_refunds',
    sales_cents:v.net_receipts_cents,refunds_cents:v.refunds_cents,refund_count:v.refund_count??null,orders:v.order_count??null,fees_cents:null,payout_cents:null,top_items:[],bottom_items:[],ranking_basis:'quantity',
    source_url:'https://www.clover.com/reporting',
-   note:'Clover API 자동 수집 · 성공 결제액에서 세금을 제외하고 해당일 환불의 세전 금액을 차감한 잠정액입니다. 팁은 합산하지 않습니다. 결제·환불 발생일(토론토) 기준이며 보고서 조정액에 따라 차이가 있을 수 있습니다. 품목 순위·음료 매출·재고 차감은 아직 연결되지 않았습니다.'
+   note:'Clover API 자동 수집 · 성공 결제액에서 세금을 제외하고 해당일 환불의 세전 금액을 차감한 잠정액입니다. 팁은 합산하지 않습니다. 결제·환불 발생일(토론토) 기준이며 보고서 조정액에 따라 차이가 있을 수 있습니다. 품목 순위·음료 매출은 아직 연결되지 않았습니다. 판매수량 재고 차감은 Clover 품목 연결이 완료된 제품에만 적용됩니다.'
   }});
  }
  return rows;
@@ -24,3 +24,4 @@ export async function readCloverPeriod(db,start,end){
   rows.push(...r.data);if(r.data.length<500)return rows;
  }
 }
+
