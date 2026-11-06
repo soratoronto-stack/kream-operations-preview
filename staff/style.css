@@ -167,3 +167,14 @@ body,.signed-in aside,.signed-in header{background:#f8f5ef;color:#352e29}
 .primary{background:var(--orange);border-color:var(--orange);color:#fff}
 #cart{background:#53443a;color:#fff}.cart-detail{color:#352e29;background:#fffaf3}
 .stepper button,.stock-current,.stock-minimum{color:#6f5949}
+
+/* Equal-size store and delivery date fields in store ordering. */
+.toolbar.controls.order-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr)) 190px;align-items:end}
+.order-controls>label{min-width:0;margin:0;gap:7px;align-self:stretch;grid-template-rows:auto 50px}
+.order-controls #store,.order-controls .date-wrap{width:100%;height:50px;min-height:50px;max-height:50px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+.order-controls #store{padding:10px 14px;min-width:0}
+.order-controls .date-wrap{padding:10px 14px;gap:8px;min-width:0}
+.order-controls #dateLabel{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.order-controls .date-wrap input{min-width:0;width:100%;height:100%}
+.order-controls #refresh{height:50px;min-height:50px;min-width:0;margin:0}
+@media(max-width:700px){.toolbar.controls.order-controls{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.order-controls #refresh{grid-column:1/-1;width:100%}}
