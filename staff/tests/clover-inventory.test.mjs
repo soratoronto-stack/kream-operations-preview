@@ -31,3 +31,17 @@ test('minimum threshold includes equality and zero, excludes unknown or invalid 
  for(const s of [{on_hand:null,minimum:6},{on_hand:0,minimum:null},{on_hand:'',minimum:0},{on_hand:'invalid',minimum:3},undefined])assert.equal(needsOrder(s),false);
  assert.equal(filterProducts([{id:'a',category:'A',name_ko:'a',name_en:'a'}],{filter:'need',category:'B',stock:[{product_id:'a',on_hand:6,minimum:6}]}).length,1);
 });
+test('collector sends uniform mapped/unmapped rows, uses only GET against Clover and keeps its key server-side',async()=>{
+ const {collectInventory}=await import('../../supabase/functions/kream-clover-sync/inventory.mjs');
+ const requests=[],writes=[];const now=1800000001000;
+ const catalog=[{id:'sausage-bread',active:true,category:'디저트',order_unit:'개',name_en:'Sausage Bread'}];
+ await collectInventory({connection:{merchant_id:'ABCDEFGHIJKLM',store_id:'finch',token:'server-test-secret'},state:{inventory_started_at:new Date(now-60000).toISOString(),inventory_cursor:new Date(now-1000).toISOString(),inventory_last_success_at:new Date(now-1000).toISOString()},catalog,now,db:async(...args)=>writes.push(args),fetchImpl:async(url,opts)=>{
+ requests.push([String(url),opts]);const path=new URL(url).pathname;
+ const data=path.endsWith('/payments')?{elements:paid}:path.endsWith('/line_items')?{elements:[{id:'a',item:{id:'sausage'},name:'Sausage Bread'},{id:'b',item:{id:'coffee'},name:'Coffee'}]}:{...order,paymentState:'PAID',payments:{elements:paid}};
+ return {ok:true,status:200,json:async()=>data};
+ }});
+ assert.ok(requests.every(([u,o])=>u.startsWith('https://api.clover.com/')&&!o.method));
+ const rows=writes.find(([path])=>path.startsWith('kream_clover_items'))[1];
+ assert.deepEqual(Object.keys(rows[0]).sort(),Object.keys(rows[1]).sort());assert.equal(rows[0].enabled,true);assert.equal(rows[1].enabled,false);
+ assert.ok(!JSON.stringify(writes).includes('server-test-secret'));
+});
