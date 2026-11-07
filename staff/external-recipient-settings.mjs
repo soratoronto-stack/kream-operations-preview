@@ -1,4 +1,4 @@
-import {halfBoxCount,displayQuantity,unitLabel} from './packing.mjs?v=20261104-factory-manual-box';
+import {halfBoxCount,displayQuantity,unitLabel} from './packing.mjs?v=20261106-all-cheesecake-trays';
 export const recipientProducts=(products,setting)=>setting?products.filter(p=>setting.product_ids.includes(p.id)):products;
 export function dispatchValue(items,prices,actual=false){let total=0,missing=0;for(const i of items){if(!Number(i.quantity))continue;const p=prices.find(p=>p.product_id===i.product_id);if(p?.price_cad==null){missing++;continue;}total+=Number(i.quantity)*Number(p.price_cad)/Number(p.quantity_factor||1);}return {total,missing};}
 export async function recipientSettings(host,c,products,onChange){const {db,t,esc}=c;const money=n=>new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format(n);let result=await db.from('kream_external_recipients').select('*');if(result.error)throw result.error;const settings=result.data;let prices=[];if(c.manageCosts&&!c.preview){const r=await db.from('kream_external_prices').select('*');if(r.error)throw r.error;prices=r.data;}

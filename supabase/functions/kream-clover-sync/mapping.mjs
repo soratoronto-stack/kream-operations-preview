@@ -25,7 +25,7 @@ export function safeMapping(name,catalog,storeId=''){
   'sour dough · plain':'sourdough-plain','whole cake · 4 inch / strawberry':'whole-strawberry-4'
  };
  const normal=s=>String(s||'').toLowerCase().replace(/[^a-z0-9가-힣]/g,'');
- const trays={'fig cheesecake':'sheet-39cdeb9512','fig cheese cake':'sheet-39cdeb9512','yuzu cheesecake':'sheet-04562b9807','yuza cheesecake':'sheet-04562b9807','yuzu cheese cake':'sheet-04562b9807','chestnut cheesecake':'sheet-9fbb33a000','chestnut cheese cake':'sheet-9fbb33a000','chestnust cheese cake':'sheet-9fbb33a000','chesnut cheesecake':'sheet-9fbb33a000','tiramisu cheesecake':'sheet-08ea6b9890','tiramisu cheese cake':'sheet-08ea6b9890'};
+ const trays={'plain cheesecake':'cheesecake','plain cheese cake':'cheesecake','plain cream cheese cake':'cheesecake','pistachio cheesecake':'sheet-9fad2225f6','pistachio cheese cake':'sheet-9fad2225f6','earl grey cheesecake':'sheet-e7cab97855','earl grey cheese cake':'sheet-e7cab97855','fig cheesecake':'sheet-39cdeb9512','fig cheese cake':'sheet-39cdeb9512','yuzu cheesecake':'sheet-04562b9807','yuza cheesecake':'sheet-04562b9807','yuzu cheese cake':'sheet-04562b9807','chestnut cheesecake':'sheet-9fbb33a000','chestnut cheese cake':'sheet-9fbb33a000','chestnust cheese cake':'sheet-9fbb33a000','chesnut cheesecake':'sheet-9fbb33a000','tiramisu cheesecake':'sheet-08ea6b9890','tiramisu cheese cake':'sheet-08ea6b9890'};
  const tray=catalog.find(p=>p.id===trays[n]&&p.active&&!p.archived&&p.order_unit==='Tray');
  if(tray)return {product_id:tray.id,stock_per_sale:0.1,enabled:true};
  const candidates=catalog.filter(p=>p.active&&!p.archived&&!['chewy','sheet-70441a15e7','sheet-9ea75322e4','sheet-1f39626328'].includes(p.id)&&p.category==='디저트'&&/^(EA|개)$/.test(p.order_unit));
@@ -33,3 +33,4 @@ export function safeMapping(name,catalog,storeId=''){
  const product=candidates.find(p=>p.id===aliases[n])||(exact.length===1?exact[0]:null);
  return product?{product_id:product.id,stock_per_sale:1,enabled:true}:{};
 }
+

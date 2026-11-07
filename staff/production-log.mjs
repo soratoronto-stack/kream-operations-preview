@@ -1,7 +1,7 @@
-import {packingHint,halfBoxCount,unitLabel,quantityLabel,boxAmount} from './packing.mjs?v=20261104-factory-manual-box';
+import {packingHint,halfBoxCount,unitLabel,quantityLabel,boxAmount} from './packing.mjs?v=20261106-all-cheesecake-trays';
 import {renderNewProductionProduct,hasNewProductionProductEdits,clearNewProductionProduct} from './production-product.mjs?v=20261103-classification';
 import {todayToronto} from './waste.mjs?v=20261102-ledgers';
-import {productionTeams,teamLabels} from './production.mjs?v=20261104-factory-manual-box';
+import {productionTeams,teamLabels} from './production.mjs?v=20261106-all-cheesecake-trays';
 import {workTime,productionTotals} from './work-records.mjs?v=20261102-drag';
 export function productionAmount(product,quantity,measure='box'){const amount=boxAmount(product,quantity,measure);if(amount<=0)throw Error('INVALID_QUANTITY');return amount;}
 let selectedTeam='',selectedSubgroup='',productSearch='';

@@ -1,5 +1,5 @@
-import {recipientSettings,recipientProducts,dispatchValue} from './external-recipient-settings.mjs?v=20261106-costs';
-import {halfBoxCount,unitLabel,quantityLabel,boxAmount,displayQuantity,inputQuantity,packingHint} from './packing.mjs?v=20261104-factory-manual-box';
+import {recipientSettings,recipientProducts,dispatchValue} from './external-recipient-settings.mjs?v=20261106-all-cheesecake-trays';
+import {halfBoxCount,unitLabel,quantityLabel,boxAmount,displayQuantity,inputQuantity,packingHint} from './packing.mjs?v=20261106-all-cheesecake-trays';
 import {subcategoryStyle} from './category-colors.mjs?v=20261104-drag-only';
 import {artwork} from './presentation.mjs?v=20261103-favorite-stars';
 import {workTime} from './work-records.mjs?v=20261102-drag';

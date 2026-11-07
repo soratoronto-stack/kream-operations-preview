@@ -1,7 +1,7 @@
 import {confirmDispatchSummary} from './dispatch-confirmation.mjs?v=20261105-dispatch-submit';
-import {halfBoxCount,unitLabel,quantityLabel,boxAmount,displayQuantity,inputQuantity} from './packing.mjs?v=20261104-factory-manual-box';
-import {renderExternalDispatch} from './external-dispatch.mjs?v=20261105-external-cards';
-import {unshippedItem,unshippedTools,bindUnshipped,hasUnshippedEdits,clearUnshippedState} from './unshipped.mjs?v=20261104-unshipped-compact';
+import {halfBoxCount,unitLabel,quantityLabel,boxAmount,displayQuantity,inputQuantity} from './packing.mjs?v=20261106-all-cheesecake-trays';
+import {renderExternalDispatch} from './external-dispatch.mjs?v=20261106-all-cheesecake-trays';
+import {unshippedItem,unshippedTools,bindUnshipped,hasUnshippedEdits,clearUnshippedState} from './unshipped.mjs?v=20261106-all-cheesecake-trays';
 import {orderReference} from './presentation.mjs?v=20261103-clean-confirmation';
 import {workTime} from './work-records.mjs?v=20261102-drag';
 export function dispatchQuantityLabel(p,value,lang='ko'){const n=Number(value);return halfBoxCount(p)===32&&Number.isFinite(n)&&n%32===0?(lang==='en'?`${n/64} box (${n} pcs)`:`${n/64}박스(${n}개)`):quantityLabel(p,value);}
@@ -85,6 +85,7 @@ export async function renderDispatch(host,c){const token=++revision,{t,esc,db,da
  });
  }catch(e){if(token===revision&&host.querySelector('#dispatchBody'))host.querySelector('#dispatchBody').innerHTML=`<p class="error">${t('출고 자료를 불러오지 못했어요. 다시 불러와 주세요.','Could not load dispatch data. Please reload.')}</p>`;}
 }
+
 
 
 

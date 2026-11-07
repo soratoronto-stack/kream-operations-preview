@@ -1,4 +1,4 @@
-import {stockDisplay,stockDisplayFactor} from './stock-units.mjs?v=20261106-tray-pieces';
+import {stockDisplay,stockDisplayFactor} from './stock-units.mjs?v=20261106-all-cheesecake-trays';
 import {todayToronto} from './waste.mjs?v=20261102-whole-quantity';
 export function cad(cents){return cents==null?'—':new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format(cents/100);}
 export async function readClover(db,storeId,date){const r=await db.from('kream_clover_daily').select('*').eq('store_id',storeId).eq('business_date',date).maybeSingle();if(r.error)throw r.error;return r.data;}

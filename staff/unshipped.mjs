@@ -1,4 +1,4 @@
-import {halfBoxCount,unitLabel,quantityLabel,boxAmount} from './packing.mjs?v=20261104-factory-manual-box';
+import {halfBoxCount,unitLabel,quantityLabel,boxAmount} from './packing.mjs?v=20261106-all-cheesecake-trays';
 import {workTime} from './work-records.mjs?v=20261102-drag';
 export const reasonChoices=[['stock_shortage','재고 부족','Stock shortage'],['dispatch_damage','출고 중 파손','Dispatch damage'],['other','기타','Other']];
 let drafts={},attempts={},errors={},saving=false;
@@ -31,3 +31,4 @@ export function bindUnshipped(host,c){const {t,db,act,reload,say}=c,forms=[...ho
  });}finally{saving=false;controls.forEach((el,i)=>el.disabled=disabled[i]);}}
  const bulk=host.querySelector('[data-save-all-reasons]');if(bulk)bulk.onclick=()=>submit(bindings.filter(b=>drafts[b.k]||attempts[b.k]));
 }
+

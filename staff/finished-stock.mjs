@@ -1,6 +1,6 @@
-import {halfBoxCount,unitLabel,quantityLabel,boxAmount} from './packing.mjs?v=20261104-factory-manual-box';
-import {productionChoices,productionGroup} from './production-log.mjs?v=20261104-factory-manual-box';
-import {teamLabels} from './production.mjs?v=20261104-factory-manual-box';
+import {halfBoxCount,unitLabel,quantityLabel,boxAmount} from './packing.mjs?v=20261106-all-cheesecake-trays';
+import {productionChoices,productionGroup} from './production-log.mjs?v=20261106-all-cheesecake-trays';
+import {teamLabels} from './production.mjs?v=20261106-all-cheesecake-trays';
 import {workTime} from './work-records.mjs?v=20261102-drag';
 let group='',subgroup='',search='',drafts={},attempt=null,generation=0;
 export const hasFinishedEdits=()=>!!attempt||Object.keys(drafts).length>0;
@@ -15,3 +15,4 @@ export async function renderFinishedStock(host,c){const {t,esc,db,act,say}=c;if(
  host.querySelector('#finishedSearch').oninput=e=>{search=e.target.value;draw();};host.querySelector('#finishedReload').onclick=()=>renderFinishedStock(host,c);draw();
  }catch{if(token===generation)host.querySelector('#finishedRows').innerHTML=`<p class="error">${t('완제품 재고를 불러오지 못했어요. 다시 불러와 주세요.','Unable to load finished stock. Try reloading.')}</p>`;}
 }
+
