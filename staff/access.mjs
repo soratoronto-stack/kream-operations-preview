@@ -9,8 +9,8 @@ export const previewRoles=[
  ['midland_owner','미드랜드 점주','Midland owner']
 ];
 const shared=['sop','manual'];
-const store=['galleria','manual','receiving','order','history','waste','sop','workplaces'];
-const factory=['galleria','factorymanual','production','dispatch','productionlog','finishedstock','inventory','materialreceiving','waste','sop','workplaces','externaldispatch'];
+const store=['galleria','galleriaHistory','galleriaSop','manual','receiving','order','history','waste','sop','workplaces'];
+const factory=['galleria','galleriaHistory','galleriaSop','factorymanual','production','dispatch','productionlog','finishedstock','inventory','materialreceiving','waste','sop','workplaces','externaldispatch'];
 export function visiblePages(role){if(role==='owner')return null;if(role==='manager_factory')return [...new Set([...store,...factory,'daily','accounts','purchases','catalogreview'])];if(role==='employee')return store;if(role==='general_manager')return [...store,'daily','accounts','catalogreview'];if(role==='manager')return [...store,'daily','accounts','catalogreview'];if(role==='midland_owner')return [...store,'daily','settlement'];if(role==='factory_staff'||role==='factory')return factory;if(role==='factory_manager')return [...factory,'purchases','catalogreview'];return [];}
 export function canPreview(profile,role){return profile?.active===true&&profile.role==='owner'&&previewRoles.some(r=>r[0]===role)&&role!=='owner';}
 export function isFactoryRole(role){return ['factory','factory_staff','factory_manager'].includes(role);}
@@ -25,7 +25,7 @@ export function orderedPages(pages,role){if(isFactoryRole(role)){const rank=['fa
 export function navigationGroups(pages,role){
  if(role==='manager_factory'){const allowed=visiblePages(role);return navigationGroups(pages,'owner').filter(g=>g.key!=='overview').map(g=>({...g,pages:g.pages.filter(p=>allowed.includes(p[0]))}));}
  if(role!=='owner')return [{key:'role',ko:'',en:'',pages:orderedPages(pages,role).filter(p=>visiblePages(role)?.includes(p[0]))}];
- const groups=[['overview','','',['overview']],['stores','매장 운영','Store operations',['manual','receiving','order','history','waste','daily','sop','settlement']],['factory','공장 운영','Factory operations',['factorymanual','production','dispatch','productionlog','finishedstock','inventory','purchases','materialreceiving','externaldispatch']],['galleria','갤러리아','Galleria',['galleria']],['settings','설정','Settings',['catalogreview','accounts','workplaces']]];
+ const groups=[['overview','','',['overview']],['stores','매장 운영','Store operations',['manual','receiving','order','history','waste','daily','sop','settlement']],['factory','공장 운영','Factory operations',['factorymanual','production','dispatch','productionlog','finishedstock','inventory','purchases','materialreceiving','externaldispatch']],['galleria','갤러리아','Galleria',['galleria','galleriaHistory','galleriaSop']],['settings','설정','Settings',['catalogreview','accounts','workplaces']]];
  return groups.map(([key,ko,en,ids])=>({key,ko,en,pages:ids.map(id=>pages.find(p=>p[0]===id)).filter(Boolean)}));
 }
 
