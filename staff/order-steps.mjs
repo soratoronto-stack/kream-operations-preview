@@ -233,7 +233,7 @@ export function renderOrderSteps(host, c) {
       ${s.failed.size ? `<p class="os-warn">${t(`${s.failed.size}개 재고가 저장되지 않았어요. 목록에서 다시 확인해 주세요.`, `${s.failed.size} counts did not save. Check them in the list.`)}</p>` : ''}
       ${!allDone&&full.remaining.length?`<button class="primary" data-os="remaining">${t('남은 품목 확인하기 →','Check remaining items →')}</button>`:''}
       <button class="done" data-os="basket" ${!allDone||c.preview||c.locked?'disabled':''}>${t('다 했어요! 🙌', 'All done! 🙌')}</button>
-      <button data-os="list">✎ ${t('목록에서 고치기', 'Fix from list')}</button></div>`);
+      ${c.openSearch?`<button type="button" data-os="search">${t('⌕ 검색해서 추가로 담기','⌕ Search and add more')}</button>`:''}<button data-os="list">✎ ${t('목록에서 고치기', 'Fix from list')}</button></div>`);
   }
 
   function drawOne() {
@@ -343,6 +343,7 @@ export function renderOrderSteps(host, c) {
       case 'one': s.view = c.forceView || 'one'; return draw();
       case 'list': s.view = 'list'; return draw();
       case 'grid': return c.showGrid();
+      case 'search': return c.openSearch?.();
       case 'supplies': return c.openSupplies?.();
       case 'minus': return stepStock(-1);
       case 'plus': return stepStock(1);
