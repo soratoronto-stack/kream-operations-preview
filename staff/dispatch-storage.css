@@ -96,7 +96,7 @@
 .storage-dispatch .sd-short-store span:first-child{font:650 11px/1.2 -apple-system,BlinkMacSystemFont,system-ui,sans-serif;color:#352e29;letter-spacing:0}
 .storage-dispatch .sd-short-store span:last-child{font:500 11px/1.2 Arial,sans-serif;color:#352e29;letter-spacing:-.5px}
 .storage-dispatch .sd-flavor-rows tbody th{padding:5px 1px;font-size:13px;font-weight:650;color:#352e29;text-align:center}
-.storage-dispatch .sd-flavor-rows .sd-flavor-total{display:block;font-size:11px;line-height:1.45;font-weight:500;color:#796b5d;margin-top:4px;white-space:normal}
+.storage-dispatch .sd-flavor-rows .sd-flavor-total{display:block;font-size:11px;line-height:1.45;font-weight:500;color:#bc392e;margin-top:4px;white-space:normal}
 .storage-dispatch .sd-flavor-rows input{display:block;width:100%;height:26px;min-height:26px;border:0;padding:0;margin:0;border-radius:4px;background:transparent;font-size:16px;font-weight:500}
 .storage-dispatch .sd-shaded th,.storage-dispatch .sd-shaded td,.storage-dispatch .sd-shaded input{background:#e9f0f3}
 .storage-dispatch .sd-flavor-rows .sd-actions{display:flex;flex-direction:row;justify-content:center;align-items:center;gap:2px;flex-wrap:nowrap}
