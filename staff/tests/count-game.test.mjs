@@ -60,3 +60,12 @@ test('두쫀쿠: 고르면 그 버튼 하나만 눌리고, 바로 넘어가지 �
  assert.equal(state.typed.d,'32');assert.equal(timers,0);assert.equal(nextClicks,0);   // 자동으로 안 넘어감
  assert.match(warn.textContent,/다음을 눌러/);
 });
+
+test('최소수량이 없는 품목은 세고 나면 주문 줄이 바로 보이고, 다른 품목은 "주문 수량 바꾸기"로 열어요', ()=>{
+ const mk=(sug)=>{const p={id:'y'},state=createStepState('finch','2026-11-26');state.key='all';state.typed.y='2';state.edited.add('y');
+  const host={innerHTML:'',contains:()=>true,querySelector:()=>null};
+  renderOrderSteps(host,{state,items:[p],key:'all',t:ko=>ko,esc:String,name:()=> '블루베리 요거트케이크',unitLabel:()=> 'EA',picture:()=>'',lastStock:()=>1,parse:(_,s)=>Number(s),getQty:()=>0,setQty:()=>{},qtyStep:()=>1,qtyDisplay:(_,q)=>q,yesNo:()=>false,suggest:()=>sug,saveStock:async()=>{},saveAvailability:async()=>{}});
+  return host.innerHTML;};
+ const none=mk(null);assert.match(none,/최소수량이 없어서 직접 담아요/);assert.match(none,/data-os="qplus"/);
+ const auto=mk(3);assert.match(auto,/주문 수량 바꾸기/);assert.doesNotMatch(auto,/data-os="qplus"/);
+});

@@ -41,6 +41,7 @@ const CSS = `
 .os-order small{display:block;font-weight:500;color:#a0522d}
 .os-order .qty{display:flex;align-items:center;gap:8px}
 .os-order .qty span{min-width:44px;font-size:26px;font-weight:800}
+.os-more{display:block;width:100%;margin-top:10px;padding:10px;border:1px dashed #d8cdb6;border-radius:14px;background:#fffaf2;color:#7a5a2e;font-size:14px;font-weight:700}
 .os-nav{display:grid;grid-template-columns:1fr 2fr;gap:8px;margin-top:12px}
 .os-nav button{height:56px;border:0;border-radius:16px;font-size:18px;font-weight:700}
 .os-prev{background:#e4ddcc;color:#3b382f}
@@ -133,6 +134,7 @@ export function createStepState(store, today) {
     edited: new Set(),
     typed: {},          // 품목 id → 입력 중인 재고 글자
     order: {},          // 품목 id → 직접 바꾼 주문수량
+    showOrder: new Set(),   // '주문 수량 바꾸기'를 눌러 연 품목
     done: new Set(remembered), // 오늘 센 품목
     failed: new Set(),
     lastShown: '',      // 애니메이션용
@@ -256,11 +258,21 @@ export function renderOrderSteps(host, c) {
       <div class="os-yn"><button class="yes ${st === '1' ? 'on' : ''}" data-yn="1" ${dis}><i>${yn.yesIcon}</i>${yn.yes}<small>${yn.yesSmall}</small></button><button class="no ${st === '0' ? 'on' : ''}" data-yn="0" ${dis}><i>🙅</i>${yn.no}<small>${yn.noSmall}</small></button></div>` : `<div class="os-label">${esc(c.countPrompt?.(p) || t('지금 재고', 'Stock now'))}</div>
       <div class="os-num"><button data-os="minus" ${dis} aria-label="${t('하나 빼기', 'minus one')}">−</button><output class="${st === '' ? 'empty' : ''}">${st === '' ? '?' : esc(st)}</output><button data-os="plus" ${dis} aria-label="${t('하나 더하기', 'plus one')}">＋</button></div>
       <div class="os-pad">${['1','2','3','4','5','6','7','8','9','.','0','⌫'].map(k => k === '.' && c.wholeOnly?.(p) ? '<span></span>' : `<button data-key="${k}" ${dis} aria-label="${k === '⌫' ? t('지우기', 'delete') : k}">${k}</button>`).join('')}</div>`}
+      <div id="osOrderLine">${orderLine(p, dis)}</div>
       <div class="os-warn" id="osWarn">${c.preview ? t('미리보기: 저장되지 않아요.', 'Preview: nothing is saved.') : s.failed.has(p.id) ? t('이 품목 재고가 저장되지 않았어요. 다시 넣어 주세요.', 'This count did not save. Please re-enter.') : ''}</div>
       <div class="os-nav"><button class="os-prev" data-os="prev" ${s.index === 0 ? 'disabled' : ''}>← ${t('이전', 'Back')}</button><button class="os-next" data-os="next" ${dis}>${s.index + 1 === items.length ? t('저장하고 계속 →', 'Save & continue →') : t('다음 →', 'Next →')}</button></div>
     </div>`);
   }
 
+  // 주문 수량 줄: 최소수량이 없어서 자동 계산이 안 되는 품목은 늘 보이고, 다른 품목은 '주문 수량 바꾸기'를 누르면 보여요
+  // (직원이 메모에 '블루베리 요거트케이크 3개'처럼 직접 치지 않아도 여기서 바로 담아요)
+  function orderLine(p, dis) {
+    s.showOrder ||= new Set();
+    const st = stockText(p), v = stored(p), noRule = v != null && v !== undefined && !c.choices?.(p) && !c.yesNo?.(p) && !c.bagMode?.(p) && c.suggest(p, v) == null && s.order[p.id] == null;
+    if (!noRule && !s.showOrder.has(p.id) && s.order[p.id] == null) return `<button class="os-more" data-os="showorder" ${dis}>🛒 ${t('주문 수량 바꾸기', 'Change order amount')}</button>`;
+    const o = orderFor(p);
+    return `<div class="os-order"><b>${t('주문', 'Order')}<small>${noRule ? t('최소수량이 없어서 직접 담아요', 'No minimum set · add what you need') : o.auto ? t('재고 기준 자동 계산', 'From stock count') : o.keep ? t('발주함에 담긴 수량', 'In basket now') : t('직접 바꿈', 'Changed by you')}</small></b><div class="qty"><button data-os="qminus" ${dis} aria-label="${t('주문 하나 빼기', 'order one less')}">−</button><span>${esc(c.qtyDisplay(p, o.q))}</span><button data-os="qplus" ${dis} aria-label="${t('주문 하나 더', 'order one more')}">＋</button></div></div>`;
+  }
   function draw() { s.view === 'list' ? drawList() : drawOne(); }
 
   function refreshNumbers() {
@@ -268,6 +280,7 @@ export function renderOrderSteps(host, c) {
     const out = host.querySelector('.os-num output'), qty = host.querySelector('.os-order .qty span'), note = host.querySelector('.os-order small');
     const st = stockText(p), o = orderFor(p);
     if (out) { out.textContent = st === '' ? '?' : st; out.classList.toggle('empty', st === ''); }
+    const line = host.querySelector('#osOrderLine'); if (line) line.innerHTML = orderLine(p, c.locked || s.saving ? 'disabled' : '');
     if (qty) qty.textContent = c.qtyDisplay(p, o.q);
     if (note) note.textContent = o.auto ? t('재고 기준 자동 계산', 'From stock count') : o.keep ? t('발주함에 담긴 수량', 'In basket now') : t('직접 바꿈', 'Changed by you');
   }
@@ -349,6 +362,7 @@ export function renderOrderSteps(host, c) {
       case 'plus': return stepStock(1);
       case 'qminus': return stepOrder(-1);
       case 'qplus': return stepOrder(1);
+      case 'showorder': { const it = items[s.index]; if (it) s.showOrder.add(it.id); return draw(); }
       case 'prev': if (p && !await commit(p)) return; s.index = Math.max(0, s.index - 1); s.streak = 0; return draw();
       case 'next': {
         if(!p)return;

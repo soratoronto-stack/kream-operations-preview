@@ -27,3 +27,10 @@ test('키친 발주는 목록 + 수량 입력 (전체 목록은 예전 카드)',
   const so=fs.readFileSync(new URL('../supplies-order.mjs',import.meta.url),'utf8');
   assert.match(so,/data-qty=/);
 });
+test('4호점 이름 "티라미수 크림"도 필수 · 추가 주문은 종류별로 묶어요', async () => {
+  assert.equal(ctx.requiredItem(P('티라미수 크림','원재료·음료','유제품')),true);
+  assert.equal(ctx.requiredItem(P('티라미수 크림밤','빵류','크림밤')),false);
+  const {groupIcon,groupOf}=await import('../supplies-order.mjs');
+  assert.equal(groupIcon('쿠키'),'🍪');assert.equal(groupIcon('휘낭시에'),'🧈');assert.equal(groupIcon('캔 음료'),'🥫');assert.equal(groupIcon('컵류'),'🥤');
+  assert.equal(groupOf(P('피칸쿠키','디저트','쿠키')),'쿠키');
+});
