@@ -119,3 +119,9 @@ body.order-workspace #cart .basket-actions{background:#fff8f5}
 #orderArea .ow-categories:not(.ow-subcategories){margin-bottom:0}
 #orderArea .ow-subcategories{border-top:1px solid #dcc7bc;margin-top:8px;padding-top:8px}
 #orderArea .ow-categories:not(.ow-subcategories) button[aria-pressed=true]{background:#f4512b;border-color:#f4512b;color:#fff}
+
+/* Approved larger titles; keep all three options on one row on small phones. */
+#orderArea .ow-tabs>button{position:relative}
+#orderArea .ow-tabs>button strong,#orderArea .ow-tabs>button strong>span{font-size:16px}
+#orderArea .ow-tabs .ow-badge{position:absolute;top:-8px;right:2px;min-width:18px;line-height:18px;padding:0 4px;font-size:10px;font-weight:700;border:1px solid #e6c4b0;box-shadow:0 1px 3px #6b4a3220}
+@media(max-width:360px){#orderArea .ow-tabs>button strong,#orderArea .ow-tabs>button strong>span{font-size:14px}}
