@@ -1,4 +1,4 @@
-import {weeklyReviewItems,workspaceTabs,workspaceCategories,firstCategory,firstSubgroup,workspaceMatches,renderWorkspaceRows,basketFeedback,basketIcon} from './order-workspace.mjs?v=20261126-workspace';
+import {weeklyReviewItems,workspaceTabs,workspaceCategories,firstCategory,firstSubgroup,workspaceMatches,renderWorkspaceRows,basketFeedback,basketIcon} from './order-workspace.mjs?v=20261126-workspace2';
 import {bindMemoLookup} from './memo-products.mjs?v=20261126-memo-products';
 import {additionalSearchMarkup,memoGuidance,renderAdditionalResults,nextAdditionalQuantity,additionalAmount} from './order-extras.mjs?v=20261126-memo-products';
 import {assertRequestNote,bindRequestNote,requestNoteMessage,editingRequestNote,validRequestNote} from './request-note.mjs?v=20261124-note-focus';

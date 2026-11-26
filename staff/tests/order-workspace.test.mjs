@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {weeklyReviewItems,minimumOrderAmount,workspaceCategories,workspaceMatches,localOrderDay} from '../order-workspace.mjs';
+import {weeklyReviewItems,minimumOrderAmount,workspaceCategories,workspaceMatches,localOrderDay,compactOrderUnit} from '../order-workspace.mjs';
 const p={id:'p',active:true,unit_confirmed:true,name_ko:'품목',order_unit:'Bag',category:'원재료·음료',subgroup:'유제품'};
 const order=(date,extra={})=>({store_id:'downtown',status:'submitted',created_at:date,kream_order_items:[{product_id:'p',quantity:1}],...extra});
 const run=(more={})=>weeklyReviewItems({catalog:[p],store:'downtown',today:'2026-11-26',orders:[order('2026-11-19T20:00:00Z')],...more});
@@ -13,3 +13,5 @@ test('never ordered, archived and inactive products are not weekly candidates',(
 test('minimum stock uses stored ordering units; half boxes display correctly',()=>{assert.equal(minimumOrderAmount(p,1.2),2);assert.equal(minimumOrderAmount({...p,id:'chewy',order_unit:'EA'},32),.5);assert.equal(minimumOrderAmount({...p,id:'cookie'},.5),1);for(const v of [null,'',0,-1,NaN])assert.equal(minimumOrderAmount(p,v),null);});
 test('five-column categories contain no All button and keep explicit requested line breaks',()=>{const esc=s=>String(s),catalog=[{...p,category:'포장·소모품',subgroup:'봉투·박스류'}];const markup=workspaceCategories({catalog,layout:{},category:'포장·소모품',subgroup:'봉투·박스류',lang:'ko',esc});assert.match(markup,/포장<\/span><br>/);assert.match(markup,/봉투<\/span><br>/);assert.doesNotMatch(markup,/>전체</);});
 test('direct search includes the croissant cookie alias',()=>{const product={...p,name_ko:'스윗 크로와상 쿠키',name_en:'Sweet croissant cookie'};assert.equal(workspaceMatches([product],'미니크로와상').length,1);});
+
+test('quantity suffix keeps units compact and translates Korean units in English',()=>{assert.equal(compactOrderUnit({...p,order_unit:'박스 (5kg)'},'ko'),'박스');assert.equal(compactOrderUnit({...p,order_unit:'박스 (5kg)'},'en'),'box');assert.equal(compactOrderUnit({...p,order_unit:'Bag · 20개/봉'},'ko'),'봉');});
