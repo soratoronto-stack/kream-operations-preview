@@ -1,0 +1,113 @@
+/* Approved compact store ordering workspace. Scoped away from factory/receiving pages. */
+body.order-workspace{--bg:#fff8f5;--line:#e9d9d0;background:#fff8f5;color:#37332d}
+body.order-workspace>header,body.order-workspace aside{background:#fff8f5}
+body.order-workspace #portal{min-width:0}
+body.order-workspace .order-controls{display:grid;grid-template-columns:minmax(0,1fr) 76px;gap:6px;align-items:center;background:none;padding:0;margin:12px 0 14px}
+body.order-workspace .order-controls>label{min-width:0;margin:0;display:flex;align-items:center;gap:8px;height:44px}
+body.order-workspace .order-controls>label>span{display:none}
+body.order-workspace .order-controls .date-wrap{flex:1;min-width:0;height:44px;min-height:44px;background:#fffdfb;border:1px solid #e5ded4;border-radius:9px}
+body.order-workspace .order-controls #dateLabel{font-size:16px;font-weight:500;white-space:nowrap}
+body.order-workspace .order-controls>button{margin:0;height:44px;min-height:44px;width:100%;padding:6px;border-radius:9px;background:#fffdfb;font-size:12px;color:#7c7061}
+#orderArea .ow-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:0 0 18px}
+#orderArea .ow-tabs>button{min-width:0;min-height:78px;border:1px solid #e6ddd1;border-radius:10px;background:#f7eee9;color:#796b58;box-shadow:none;padding:10px 3px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:7px}
+#orderArea .ow-tabs>button strong{font-size:14px;font-weight:800;line-height:1.35;letter-spacing:-.4px;white-space:nowrap}
+#orderArea .ow-tabs>button strong>span{margin-right:3px}
+#orderArea .ow-tabs>button small{font-size:11px;font-weight:400;line-height:1.45;letter-spacing:-.3px;word-break:keep-all;color:#938777}
+#orderArea .ow-tabs>button[aria-pressed=true]{background:#fae6da;border-color:#e9bda4;color:#b34a2b}
+#orderArea .ow-tabs>button[aria-pressed=true] small{color:#a27057}
+#orderArea .ow-badge{display:inline-block;min-width:15px;line-height:16px;text-align:center;border-radius:8px;background:#e5d5c7;color:#75604e;font-size:10px;font-weight:600;padding:0 3px}
+#orderArea .ow-tabs [aria-pressed=true] .ow-badge{background:#c65b37;color:#fff}
+#orderArea .ow-search-section .order-extra-search{display:flex;align-items:center;margin:0 0 12px;padding:0 9px;background:#fff4ee;border:2px solid #ed5837;border-radius:9px;min-height:46px}
+#orderArea .ow-search-section .order-extra-search>label{margin:0;display:block;flex:none}
+#orderArea .ow-search-section .order-extra-search>label strong,#orderArea .ow-search-section #additionalSearchHelp{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+#orderArea .ow-search-section .order-extra-input{flex:1;min-width:0;border:0;background:transparent}
+#orderArea .ow-search-section #search{height:42px;min-height:42px;margin:0;padding:7px;font-size:16px;background:transparent}
+#orderArea .ow-search-section .order-extra-feedback{display:none}
+#orderArea .ow-categories{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;margin:0 0 8px}
+#orderArea .ow-categories button{display:block;min-width:0;min-height:35px;height:auto;margin:0;padding:4px 2px;background:#fff8f5;color:#816d59;border:1px solid #e7dcd2;border-radius:3px;font-size:11px;line-height:1.15;font-weight:500;overflow-wrap:anywhere}
+#orderArea .ow-categories button>span:first-child{font-size:10px;margin-right:3px}
+#orderArea .ow-categories button>span:last-child{vertical-align:middle}
+#orderArea .ow-categories .ow-word{white-space:nowrap;word-break:keep-all}
+#orderArea .ow-categories button[aria-pressed=true]{background:#fae6da;border-color:#dd4a27;color:#dd4a27}
+#orderArea .ow-subcategories{margin-bottom:12px}
+#orderArea #products{display:block;min-width:0;width:100%}
+#orderArea .ow-row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px;padding:12px 0;border-bottom:1px solid #e5dfd5;background:transparent}
+#orderArea .ow-item{min-width:0;font-size:13px;line-height:1.45;letter-spacing:-.35px}
+#orderArea .ow-item strong{display:block;font-size:13px;font-weight:600;word-break:keep-all;overflow-wrap:break-word}
+#orderArea .ow-item small{display:block;color:#998c7c;font-size:11px;line-height:1.4;margin-top:4px;font-weight:400}
+#orderArea .ow-row-actions{display:flex;align-items:center;gap:6px}
+#orderArea .ow-weekly .ow-row-actions{width:154px;justify-content:flex-end}
+#orderArea .ow-add-group{display:flex;align-items:center;gap:4px}
+#orderArea .ow-count{display:flex;align-items:center;justify-content:center;gap:1px;min-width:50px;max-width:96px;height:38px;background:#fffdfb;border:1px solid #e2d9cc;border-radius:6px;padding:0 3px}
+#orderArea .ow-count input[type=number]{appearance:textfield;-moz-appearance:textfield;width:28px!important;min-width:0;min-height:34px;height:34px;border:0;border-radius:0;background:transparent;margin:0;padding:0;font-size:16px;text-align:center;color:#4e4438;box-shadow:none}
+#orderArea .ow-count input::-webkit-inner-spin-button,#orderArea .ow-count input::-webkit-outer-spin-button{appearance:none;margin:0}
+#orderArea .ow-count span{font-size:11px;color:#8b7e6d;line-height:1.2;max-width:60px;overflow-wrap:anywhere}
+#orderArea .ow-count:focus-within{outline:2px solid #caac8b;outline-offset:1px}
+#orderArea .ow-row button{min-height:38px;height:38px;border-radius:7px;font-size:11px;font-weight:500;line-height:1.35;box-shadow:none;margin:0;padding:0 6px}
+#orderArea .ow-add-group>button{min-width:33px;background:#f3eee5;border:1px solid #e2d7c8;color:#7b624c;white-space:nowrap}
+#orderArea .ow-row .ow-enough{flex:none;width:56px;background:#e4eddd;border:1px solid #d5e2ca;color:#4f7043;padding:3px 4px;letter-spacing:-.3px}
+#orderArea .ow-weekly h2{font-size:15px;color:#3c382f;margin:0 0 5px;letter-spacing:-.3px}
+#orderArea .ow-help,#orderArea .ow-weekly-guide{font-size:11px;line-height:1.6;color:#8b7e6e;margin:0}
+#orderArea .ow-weekly-guide{padding:9px 0 12px;border-bottom:1px solid #ddd5ca}
+#orderArea .ow-weekly-guide strong{color:#53744b;font-weight:600}
+#orderArea .ow-empty{font-size:12px;color:#8b7e6e;padding:15px 0}
+#orderArea .ow-management{margin:0 0 10px;font-size:12px}
+#orderArea .ow-management summary{font-size:11px;color:#998c7c;min-height:28px}
+#orderArea .ow-management-actions{display:flex;gap:6px}
+#orderArea .ow-management-actions button{font-size:12px;padding:6px;min-height:32px}
+#orderArea .ow-note-section{margin:14px 0 8px}
+#orderArea .ow-note-section>summary{font-size:12px;color:#8b7e6e;min-height:36px}
+body.order-workspace #orderArea .note-game{background:none;box-shadow:none;border:0;padding:0;margin:0;max-width:none}
+body.order-workspace #orderArea .note-game .note-game-title{display:none}
+body.order-workspace #orderArea .note-game .note-plain{display:block}
+body.order-workspace #orderArea .ow-save-tools{display:none}
+body.order-workspace .os{margin:0 auto 12px}
+body.order-workspace .os .os-tools,body.order-workspace .os .os-shift{display:none}
+body.order-workspace #cart{background:#fff8f5;border-color:#eadbd0;gap:6px}
+body.order-workspace #cart .ow-cart-icon{width:19px;height:19px;vertical-align:middle;flex:none;margin-right:4px}
+body.order-workspace #cart #cartReview{background:#ec5732;border:0;border-radius:9px;font-size:13px;min-height:44px}
+body.order-workspace #cart #cartToggle{font-size:13px}
+body.order-workspace #cart .basket-search-link{padding:8px 10px;margin-bottom:10px;border:1px solid #e6bcaa;border-radius:7px;background:#fae6da;color:#b34a2b;font-weight:700}
+body.order-workspace #cart .cart-detail{background:#fff8f5}
+body.order-workspace #cart .basket-line{padding-top:7px;padding-bottom:7px}
+body.order-workspace #cart .basket-line .stepper button{display:none}
+body.order-workspace #cart .basket-line .stepper input{font-size:16px}
+.ow-added-message{position:absolute;bottom:100%;left:0;right:0;margin:0 0 5px;background:#e4eddd;color:#4f7043;border-radius:8px;padding:7px 10px;font-size:12px;text-align:center;pointer-events:none}
+.ow-added .ow-cart-icon{animation:ow-cart-shake .55s ease-in-out}
+@keyframes ow-cart-shake{0%,100%{transform:rotate(0)}20%{transform:rotate(-17deg) scale(1.2)}45%{transform:rotate(15deg) scale(1.2)}70%{transform:rotate(-8deg)}}
+@media(prefers-reduced-motion:reduce){.ow-added .ow-cart-icon{animation:none}}
+@media(max-width:360px){#orderArea .ow-tabs{gap:4px}#orderArea .ow-tabs>button strong{font-size:12px}#orderArea .ow-tabs>button strong>span{margin-right:1px}#orderArea .ow-tabs>button{padding:9px 1px;min-height:84px}#orderArea .ow-tabs>button small{font-size:11px}#orderArea .ow-row{gap:5px}#orderArea .ow-item strong{font-size:12px}#orderArea .ow-weekly .ow-row-actions{width:141px;gap:4px}#orderArea .ow-row .ow-enough{width:49px}#orderArea .ow-count{padding:0 2px}#orderArea .ow-count input[type=number]{width:25px!important}#orderArea .ow-item small{letter-spacing:-.5px}}
+/* English labels may wrap, never truncate or force horizontal scrolling. */
+html[lang=en] #orderArea .ow-tabs>button strong{white-space:normal}
+html[lang=en] #orderArea .ow-enough{font-size:10px}
+.delivery-date-dialog{width:min(370px,calc(100vw - 28px));max-width:calc(100vw - 28px);max-height:calc(100dvh - 32px);padding:25px 18px 16px;border:1px solid #ead7cd;border-radius:19px;background:#fff8f5;color:#40352f;text-align:center;box-sizing:border-box;overflow:auto}
+.delivery-date-dialog::backdrop{background:#392d2859}
+.delivery-date-dialog .delivery-confirm-symbol{font-size:26px;line-height:1;margin-bottom:13px}
+.delivery-date-dialog h2{font-size:17px;font-weight:700;line-height:1.5;margin:0}
+.delivery-date-dialog .delivery-confirm-value{font-size:29px;font-weight:800;line-height:1.4;color:#be4f31;margin:17px 0 6px;letter-spacing:-.7px}
+.delivery-date-dialog .delivery-confirm-help{font-size:12px;line-height:1.5;color:#927e6e;margin:0 0 23px}
+.delivery-date-dialog .actions{display:flex;flex-direction:column;gap:7px;margin:0}
+.delivery-date-dialog .actions button{width:100%;min-height:46px;max-width:100%;font-size:12px;font-weight:700;line-height:1.5;border-radius:9px;padding:10px 6px;white-space:normal;word-break:keep-all}
+.delivery-date-dialog .actions button.primary{color:#fff;background:#ec5732;border:1px solid #ec5732}
+.delivery-date-dialog .actions button:not(.primary){color:#897261;background:transparent;border:1px solid #eadbd0}
+body.order-workspace #cart,body.order-workspace #cart>button:first-child{color:#735f4e}
+body.order-workspace #cart b{color:#fff}
+body.order-workspace #cart .basket-line{grid-template-columns:minmax(0,1fr) 54px 40px;gap:6px}
+body.order-workspace #cart .basket-line .stepper{border:0;background:none;display:block;min-width:0}
+body.order-workspace #cart .basket-line .stepper input{width:50px;min-height:38px;border:1px solid #e2d9cc;border-radius:6px;background:#fffdfb}
+body.order-workspace #cart .basket-actions{background:#fff8f5}
+#orderArea .ow-tabs>button small{display:block}
+#orderArea .ow-tabs>button strong>span{font-size:14px;width:auto;display:inline}
+#orderArea .ow-categories button>span{width:auto}
+#orderArea .ow-count span{white-space:nowrap;max-width:none;overflow-wrap:normal}
+@media(max-width:360px){#orderArea .ow-tabs>button strong>span{font-size:12px}#orderArea .ow-weekly .ow-row-actions{width:auto}}
+#orderArea .ow-tabs>button[aria-pressed=true]{background:#f4512b;border-color:#f4512b;color:#fff}
+#orderArea .ow-tabs>button[aria-pressed=true] small{color:#fff3ed}
+#orderArea .ow-tabs [aria-pressed=true] .ow-badge{background:#fff;color:#d64a29}
+#orderArea .ow-categories button>span:last-child,#orderArea .ow-categories .ow-word{font-size:11px;line-height:1.15;font-weight:500;letter-spacing:-.25px;width:auto;display:inline}
+#orderArea .ow-categories button>span:first-child{font-size:9px;width:auto}
+#orderArea .ow-categories button{border-radius:10px;text-align:center;border-color:#e8dcd3;background:#fffaf7;color:#8b7562}
+#orderArea .ow-categories button[aria-pressed=true]{background:#fae6da;border:1px solid #ffa28a;color:#c34a2c}
+#orderArea .ow-categories button{display:flex;align-items:center;justify-content:center;gap:3px;text-align:center}
+#orderArea .ow-categories button>span:first-child{flex:none;margin:0;align-self:center}
+#orderArea .ow-categories button>span:last-child{display:block;min-width:0;text-align:center;flex:0 1 auto}
