@@ -111,3 +111,8 @@ body.order-workspace #cart .basket-actions{background:#fff8f5}
 #orderArea .ow-categories button{display:flex;align-items:center;justify-content:center;gap:3px;text-align:center}
 #orderArea .ow-categories button>span:first-child{flex:none;margin:0;align-self:center}
 #orderArea .ow-categories button>span:last-child{display:block;min-width:0;text-align:center;flex:0 1 auto}
+
+/* Center both lines of all three ordering option labels. */
+#orderArea .ow-tabs>button{text-align:center}
+#orderArea .ow-tabs>button>strong,#orderArea .ow-tabs>button>small{display:block;width:100%;text-align:center}
+
