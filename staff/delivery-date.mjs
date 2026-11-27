@@ -8,7 +8,7 @@ export function confirmDeliveryDate(value,{lang='ko',doc=document,actionLabel}={
  const date=doc.createElement('span');date.dataset.deliveryDate=value;date.className='delivery-confirm-value';date.textContent=new Intl.DateTimeFormat(lang==='en'?'en-CA':'ko-KR',{month:'long',day:'numeric',weekday:'long',timeZone:'UTC'}).format(new Date(value+'T12:00:00Z'));
  const question=doc.createElement('span');question.className='delivery-confirm-question';question.textContent=text('이 맞나요?','?');title.append(date,question);
  const help=doc.createElement('p');help.className='delivery-confirm-help';help.textContent=text('날짜를 한번 더 확인 !','Double-check the date!');
- const actions=doc.createElement('div');actions.className='actions';const yes=doc.createElement('button'),change=doc.createElement('button');yes.className='primary';yes.type=change.type='button';yes.textContent=actionLabel||text('네. 맞아요!',"Yes, that’s right!");change.textContent=text('날짜 바꾸기','Change date');actions.append(yes,change);dialog.append(symbol,title,help,actions);doc.body.append(dialog);
+ const actions=doc.createElement('div');actions.className='actions';const yes=doc.createElement('button'),change=doc.createElement('button');yes.className='primary';yes.type=change.type='button';yes.textContent=actionLabel||text('네. 맞아요! ( 발주 완료하기 )',"Yes, that’s right! ( Complete order )");change.textContent=text('날짜 바꾸기','Change date');actions.append(yes,change);dialog.append(symbol,title,help,actions);doc.body.append(dialog);
  return new Promise(resolve=>{let accepted=false;yes.onclick=()=>{accepted=true;dialog.close();};change.onclick=()=>dialog.close();dialog.onclose=()=>{dialog.remove();resolve(accepted);};dialog.showModal();change.focus();});
 }
 
