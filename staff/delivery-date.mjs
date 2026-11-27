@@ -16,3 +16,11 @@ export function defaultReceiptDate(now=new Date()){
  return new Date(Date.UTC(+p.year,+p.month-1,+p.day+(+p.hour<3?0:1))).toISOString().slice(0,10);
 }
 export function receiptRequestLabel(value,lang='ko'){return fullDeliveryDate(value,lang)+(lang==='en'?' — requested receipt date':' 입고 요청입니다.');}
+
+export function restoredReceiptDate(saved,now=new Date()){
+ const minimum=defaultReceiptDate(now),value=saved?.delivery_date;
+ if(!validDeliveryDate(value))return minimum;
+ const empty=!(saved?.items||[]).length&&!saved?.note?.trim();
+ return empty&&value<minimum?minimum:value;
+}
+export function selectableReceiptDate(value,now=new Date()){return validDeliveryDate(value)&&value>=defaultReceiptDate(now);}
