@@ -131,3 +131,15 @@ body.order-workspace #cart .basket-actions{background:#fff8f5}
  #orderArea .ow-subcategories button.ow-wide-lines>span:first-child{line-height:9px}
  #orderArea .ow-subcategories button.ow-wide-lines>span:last-child{flex:none;width:100%}
 }
+
+/* Approved receiving-day confirmation, matching the mobile preview. */
+.delivery-date-dialog{width:min(420px,calc(100vw - 32px));max-width:calc(100vw - 32px);padding:24px;background:#fff8f1;border-radius:20px}
+.delivery-date-dialog .delivery-confirm-symbol{font-size:30px;line-height:normal;margin-bottom:8px}
+.delivery-date-dialog h2{font-size:21px;font-weight:700;line-height:normal;margin:4px 0 8px}
+.delivery-date-dialog .delivery-confirm-value{display:block;font-size:30px;font-weight:700;line-height:normal;color:#c44928;margin:4px 0;letter-spacing:normal}
+.delivery-date-dialog .delivery-confirm-question{display:block}
+.delivery-date-dialog .delivery-confirm-help{font-size:15px;line-height:1.5;color:#887562;margin:6px 0}
+.delivery-date-dialog .actions{gap:10px;margin-top:20px}
+.delivery-date-dialog .actions button{min-height:42px;padding:8px 12px;font-size:16px;line-height:normal;border-radius:10px}
+.delivery-date-dialog .actions button.primary{background:#ff4b28;border-color:#ff4b28}
+.delivery-date-dialog .actions button:not(.primary){background:#fffdfa;color:#352e29}
